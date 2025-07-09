@@ -1,0 +1,26 @@
+.footer {
+  max-width: 880px;
+  height: 18px;
+  margin: 68px auto 0 auto;
+  color: rgba(84, 84, 84, 1);
+  font-family: "Inter";
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.78px;
+  text-align: left;
+  padding-bottom: 60px;
+}
+
+@media screen and (max-width: 910px) {
+  .footer {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 625px) {
+  .footer {
+    max-width: 282px;
+    width: 100%;
+    justify-content: center;
+  }
+}

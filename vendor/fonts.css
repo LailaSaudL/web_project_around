@@ -9,3 +9,9 @@
   src: url(../vendor/fonts/Inter-Black.woff2);
   font-weight: 900;
 }
+
+@font-face {
+  font-family: "inter";
+  src: url(../fonts/Inter-Regular.woff2) format("woff2");
+  font-weight: 400; /* FontWeight */
+}
