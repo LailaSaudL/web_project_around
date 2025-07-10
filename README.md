@@ -22,4 +22,7 @@ Creacion de una página interactiva para compartir fotografías y donde sus usua
 
 - Diseño del proyecto: Figma
 
+## GitHub Pages
+
+https://lailasaudl.github.io/web_project_around/
 
