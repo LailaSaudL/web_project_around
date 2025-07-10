@@ -11,6 +11,7 @@
   padding-bottom: 60px;
 }
 
+/* Responsive footer */
 @media screen and (max-width: 910px) {
   .footer {
     width: 80%;

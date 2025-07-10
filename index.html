@@ -12,178 +12,171 @@
   </head>
 
   <body>
-        <div class="page">
+    <div class="page">
       <header class="header">
-        <img class="header__logo"src="./images/logo.svg" alt="Around USA logo" />
-</header>
+        <img class="header__logo" src="./images/logo.png" alt="Around USA logo" />
+      </header>
 
-<main class="content">
-<section class="profile">
-  <img
-    class="profile__avatar"
-    src="images/avatar.jpg"
-    alt="Avatar del usuario"
-  />
-  <div class="profile__info">
-    <div class="profile__details">
-      <h1 class="profile__name">Jacques Cousteau</h1>
-      <button class="button" id="edit-button">
-        <img
-          class="button__image"
-          src="images/pen-button.png"
-          alt="Editar perfil"
-        />
-      </button>
-    </div>
-    <p class="profile__text">Explorador</p>
-  </div>
-  <button class="add-button" id="add-card">
-    <img
-      class="add-button__image"
-      src="images/sumar.png"
-      alt="Añadir tarjeta"
-    />
-  </button>
-</section>
+      <main class="content">
+        <section class="profile">
+          <img
+            class="profile__avatar"
+            src="images/avatar.jpg"
+            alt="Avatar del usuario"
+          />
+          <div class="profile__info">
+            <div class="profile__details">
+              <h1 class="profile__name">Jacques Cousteau</h1>
+              <button class="button" id="edit-button">
+                <img
+                  class="button__image"
+                  src="images/pen-button.png"
+                  alt="Editar perfil"
+                />
+              </button>
+            </div>
+            <p class="profile__text">Explorador</p>
+          </div>
+          <button class="add-button" id="add-card">
+            <img
+              class="add-button__image"
+              src="images/add.png"
+              alt="Añadir tarjeta"
+            />
+          </button>
+        </section>
 
-<section class="gallery">
+        <section class="gallery">
           <!-- Tarjetas (6) -->
           <div class="card">
             <img class="card__image" src="images/valledeyosemite.png" alt="Valle de Yosemite" />
             <div class="card__content">
               <p class="card__title">Valle de Yosemite</p>
-              <button class="card__like-button"></button>
+             <button class="card__like-button"></button>
             </div>
           </div>
-
-                    <div class="card">
+          <div class="card">
             <img class="card__image" src="images/lagolouise.png" alt="Lago Louise" />
             <div class="card__content">
               <p class="card__title">Lago Louise</p>
               <button class="card__like-button"></button>
             </div>
           </div>
-
-                    <div class="card">
+          <div class="card">
             <img class="card__image" src="images/montañascalvas.png" alt="Montañas Calvas" />
             <div class="card__content">
               <p class="card__title">Montañas Calvas</p>
               <button class="card__like-button"></button>
             </div>
           </div>
-
-                    <div class="card">
+          <div class="card">
             <img class="card__image" src="images/latemar.png" alt="Latemar" />
             <div class="card__content">
               <p class="card__title">Latemar</p>
               <button class="card__like-button"></button>
             </div>
           </div>
-
-                    <div class="card">
-            <img class="card__image" src="images/vanoisnationalpng" alt="Vanois National" />
+          <div class="card">
+            <img class="card__image" src="images/vanoisnationalpark.png" alt="Vanois National" />
             <div class="card__content">
               <p class="card__title">Vanois National</p>
               <button class="card__like-button"></button>
             </div>
           </div>
-
-                    <div class="card">
+          <div class="card">
             <img class="card__image" src="images/lagodibraies.png" alt="Lago di Braies" />
             <div class="card__content">
               <p class="card__title">Lago di Braies</p>
               <button class="card__like-button"></button>
             </div>
           </div>
-
         </section>
       </main>
 
-    <footer
-        class="footer">
+      <footer class="footer">
         © 2025 Alrededor de los EE.UU.
-    </footer>
-     </div>
+      </footer>
+    </div>
 
-         <!-- Popup: Editar Perfil -->
-   <dialog class="popup" id="profile-popup">
-  <div class="popup__container">
-    <button class="close" id="close-button">×</button>
-    <h2 class="popup__title">Editar Perfil</h2>
-    <form class="popup__form" id="profile-form">
-      <input
-        type="text"
-        id="name-profile"
-        value=""
-        placeholder="Nombre"
-        class="popup__input"
-        minlength="2"
-        maxlength="30"
-        required
-      />
-      <span class="popup__error" id="name-profile-error"></span>
-      <input
-        type="text"
-        id="job-profile"
-        value=""
-        placeholder="Acerca de mí"
-        class="popup__input popup__input_job"
-        minlength="2"
-        maxlength="30"
-        required
-      />
-      <span class="popup__error" id="job-profile-error"></span>
-      <button type="submit" class="submit" id="save-button">
-        <span class="submit__text">Guardar</span>
-      </button>
-    </form>
-  </div>
-</dialog>
+    <!-- Popup: Editar Perfil -->
+    <dialog class="popup" id="profile-popup">
+      <div class="popup__container">
+        <button class="popup__button_close" id="close-button">×</button>
+        <form class="popup__form" id="profile-form">
+          <h2 class="popup__title">Editar Perfil</h2>
+          <input
+            type="text"
+            id="name-profile"
+            placeholder="Nombre"
+            class="popup__input"
+            minlength="2"
+            maxlength="30"
+            required
+          />
+          <span class="popup__error" id="name-profile-error"></span>
+          <input
+            type="text"
+            id="job-profile"
+            placeholder="Acerca de mí"
+            class="popup__input popup__input_job"
+            minlength="2"
+            maxlength="30"
+            required
+          />
+          <span class="popup__error" id="job-profile-error"></span>
+          <button type="submit" class="popup__button_save">
+            Guardar
+          </button>
+        </form>
+      </div>
+    </dialog>
 
-<dialog class="popup" id="card-popup">
-  <div class="popup__container">
-    <button class="close" id="close-card">×</button>
-    <h2 class="popup__title">Nuevo Lugar</h2>
-    <form class="popup__form" id="card-form">
-      <input
-        type="text"
-        id="card-title"
-        value=""
-        placeholder="Título"
-        class="popup__input popup__input_card-title"
-        minlength="2"
-        maxlength="30"
-        required
-      />
-      <span class="popup__error" id="card-title-error"></span>
-      <input
-        type="url"
-        id="card-url"
-        value=""
-        placeholder="URL de la imagen"
-        class="popup__input popup__input_card-url"
-        required
-      />
-      <span class="popup__error" id="card-url-error"></span>
-      <button type="submit" class="submit" id="save-card">
-        <span class="submit__text">Crear</span>
-      </button>
-    </form>
-  </div>
-</dialog>
+    <!-- Popup: Nueva tarjeta -->
+    <dialog class="popup" id="card-popup">
+      <div class="popup__container">
+        <button class="popup__button_close" id="close-card">×</button>
+        <form class="popup__form" id="card-form">
+          <h2 class="popup__title">Nuevo Lugar</h2>
+          <input
+            type="text"
+            id="card-title"
+            placeholder="Título"
+            class="popup__input popup__input_card-title"
+            minlength="2"
+            maxlength="30"
+            required
+          />
+          <span class="popup__error" id="card-title-error"></span>
+          <input
+            type="url"
+            id="card-url"
+            placeholder="URL de la imagen"
+            class="popup__input popup__input_card-url"
+            required
+          />
+          <span class="popup__error" id="card-url-error"></span>
+          <button type="submit" class="popup__button_add">
+            Crear
+          </button>
+        </form>
+      </div>
+    </dialog>
 
-<dialog class="popup__image-box" id="image-popup">
-  <div class="popup__image-container">
-    <button class="close-popup" id="close-image">×</button>
-    <img
-      id="popup-image"
-      class="image-details"
-      src="./images"
-      alt="Nuevo lugar"
-    />
-    <h2 id="popup-label" class="popup-name">Nuevo Lugar</h2>
-  </div>
-</dialog>
+    <!-- Popup: Imagen -->
+    <dialog class="popup popup__image-box" id="image-popup">
+      <div class="popup__image-container">
+        <button class="popup__button_close" id="close-image">×</button>
+        <img
+          id="popup-image"
+          class="popup__image"
+          src=""
+          alt="Nuevo lugar"
+        />
+        <div class="popup__text-content">
+          <h2 id="popup-label" class="popup__text">Nuevo Lugar</h2>
+        </div>
+      </div>
+    </dialog>
 
     <!-- Scripts -->
     <script src="scripts/index.js"></script>

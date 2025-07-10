@@ -54,21 +54,21 @@
 .card__like-button {
   width: 21px;
   height: 19px;
-  padding: 10px;
+  padding: 0;
+  margin: auto 0;
   cursor: pointer;
-  background-image: url(../images/favoritewhite.png);
-  background-repeat: no-repeat;
+  background: url("../images/favoritewhite.png") no-repeat center;
   background-size: cover;
-  background-position: center;
-  align-self: center;
+  border: none;
+  transition: opacity 0.3s ease;
 }
 
-.button-liked:hover {
-  opacity: 0.5;
+.card__like-button:hover {
+  opacity: 0.6;
 }
 
-.like-button {
-  background-image: url(../images/favoriteblack.png);
+.card__like-button_active {
+  background-image: url("../images/favoriteblack.png");
 }
 
 button {
@@ -77,6 +77,7 @@ button {
   outline: none;
 }
 
+/* Responsive cards */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
   .gallery {
     display: flex;

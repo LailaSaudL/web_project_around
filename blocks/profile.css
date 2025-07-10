@@ -99,7 +99,7 @@
   color: #ffffff;
 }
 
-/* Responsivo PROFILE */
+/* Responsive profile */
 @media screen and (max-width: 910px) {
   .profile {
     margin: auto;
