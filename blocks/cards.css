@@ -19,6 +19,7 @@
   overflow: hidden;
   background: #fff;
   margin: auto;
+  overflow: scroll;
 }
 
 .card__image {
