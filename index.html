@@ -46,7 +46,7 @@
           </button>
         </section>
 
-        <section class="gallery">
+        <section class="gallery" id="cards-container">
           <!-- Tarjetas (6) -->
           <div class="card">
             <img class="card__image" src="images/valledeyosemite.png" alt="Valle de Yosemite" />
@@ -91,6 +91,18 @@
             </div>
           </div>
         </section>
+
+        <!-- Creación de Tarjetas Nuevas-->
+        <template id="card-template">
+  <div class="card">
+    <img class="card__image" src="" alt="" />
+    <div class="card__content">
+      <p class="card__title"></p>
+      <button class="card__like-button"></button>
+    </div>
+  </div>
+</template>
+
       </main>
 
       <footer class="footer">
@@ -101,7 +113,7 @@
     <!-- Popup: Editar Perfil -->
     <dialog class="popup" id="profile-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" id="close-button">×</button>
+        <button class="popup__button popup__button_close" id="close-button">X</button>
         <form class="popup__form" id="profile-form">
           <h2 class="popup__title">Editar Perfil</h2>
           <input
@@ -134,7 +146,7 @@
     <!-- Popup: Nueva tarjeta -->
     <dialog class="popup" id="card-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" id="close-card">×</button>
+        <button class="popup__button popup__button_close" id="close-card">X</button>
         <form class="popup__form" id="card-form">
           <h2 class="popup__title">Nuevo Lugar</h2>
           <input
@@ -163,15 +175,31 @@
     </dialog>
 
     <!-- Popup: Imagen -->
-    <dialog class="popup popup__image-box" id="image-popup">
-      <div class="popup__button popup__button_close">
-        <button class="popup__button popup__button_close" id="close-image">×</button>
-        <img id="popup-image" class="popup__image" src="" alt="Nuevo lugar" />
-        <div class="popup__text-content">
-          <h2 id="popup-label" class="popup__text">Nuevo Lugar</h2>
-        </div>
+<div class="popup" id="popup-image">
+      <div class="popup__container popup__container--image">
+        <button type="button" class="popup__exit" id="popup-image-close-button">X</button>
+        <img class="popup__img" />
+        <h2 class="popup__img-title"></h2>
       </div>
-    </dialog>
+    </div>
+    <section class="cards">
+      <template id="card-template">
+        <div class="card">
+          <button class="card__delete-button" type="button"></button>
+          <img
+            src="./images/valledeyosemite.jpg"
+            class="card__image"
+            alt="Imagen de Valle de Yosemite"
+            id="popuImageImg"
+          />
+          <div class="card__info">
+            <h2 class="card__title">Valle de Yosemite</h2>
+            <button class="card__like-button" type="button"></button>
+          </div>
+        </div>
+      </template>
+    </section>
+
 
     <!-- Scripts -->
     <script src="scripts/index.js"></script>

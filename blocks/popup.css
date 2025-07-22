@@ -128,6 +128,62 @@
   color: #fff;
 }
 
+.popup.popup_opened {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* POPUP DE LA IMAGEN */
+/* Estilo específico SOLO para el popup de imagen */
+.popup__container--image {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  max-width: 75%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Imagen dentro del popup */
+.popup__img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+/* Título (opcional) */
+.popup__img-title {
+  color: #fff;
+  margin-top: 10px;
+  font-size: 18px;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+}
+
+/* Botón X de cierre específico */
+.popup__exit {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  color: white;
+  font-size: 28px;
+  border: none;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 605px) {
   .popup__container {
     max-width: 280px;

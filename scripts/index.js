@@ -1,16 +1,18 @@
 // --------- SELECCIÓN DE ELEMENTOS ---------
 const profilePopup = document.getElementById("profile-popup");
 const cardPopup = document.getElementById("card-popup");
-const imagePopup = document.getElementById("image-popup");
 
 // Botones
 const editButton = document.getElementById("edit-button");
 const closeProfileButton = document.getElementById("close-button");
-
 const addCardButton = document.getElementById("add-card");
 const closeCardButton = document.getElementById("close-card");
 
-const closeImageButton = document.getElementById("close-image");
+// Inputs del formulario de perfil
+const nameInput = document.getElementById("name-profile");
+const jobInput = document.getElementById("job-profile");
+const profileName = document.querySelector(".profile__name");
+const profileText = document.querySelector(".profile__text");
 
 // Like
 document.querySelectorAll(".card__like-button").forEach((button) => {
@@ -18,14 +20,6 @@ document.querySelectorAll(".card__like-button").forEach((button) => {
     button.classList.toggle("card__like-button_active");
   });
 });
-
-// Inputs del formulario de perfil
-const nameInput = document.getElementById("name-profile");
-const jobInput = document.getElementById("job-profile");
-
-// Elementos de texto del perfil
-const profileName = document.querySelector(".profile__name");
-const profileText = document.querySelector(".profile__text");
 
 // Formulario
 const profileForm = document.getElementById("profile-form");
@@ -59,7 +53,76 @@ closeCardButton.addEventListener("click", () => {
   cardPopup.close();
 });
 
-// Ver imagen en grande (a completar cuando crees tarjetas dinámicas)
+// --------- POPUP DE IMAGEN FUNCIONAL ---------
+
+const imagePopup = document.getElementById("popup-image");
+const popupImageElement = imagePopup.querySelector(".popup__img");
+const popupImageTitle = imagePopup.querySelector(".popup__img-title");
+const closeImageButton = document.getElementById("popup-image-close-button");
+
+function openImagePopup(name, link) {
+  popupImageElement.src = link;
+  popupImageElement.alt = name;
+  popupImageTitle.textContent = name;
+  imagePopup.classList.add("popup_opened");
+}
+
 closeImageButton.addEventListener("click", () => {
-  imagePopup.close();
+  imagePopup.classList.remove("popup_opened");
+});
+
+// Añadir evento a todas las imágenes existentes
+document.querySelectorAll(".card__image").forEach((img) => {
+  img.addEventListener("click", () => {
+    const name = img.alt;
+    const link = img.src;
+    openImagePopup(name, link);
+  });
+});
+
+// --------- SELECCIÓN DE ELEMENTOS PARA NUEVA TARJETA ---------
+const cardForm = document.getElementById("card-form");
+const titleInput = document.getElementById("card-title");
+const urlInput = document.getElementById("card-url");
+const cardsContainer = document.getElementById("cards-container");
+const cardTemplate = document.getElementById("card-template").content;
+
+// --------- FUNCIÓN PARA CREAR Y AÑADIR TARJETA ---------
+function createCard(name, link) {
+  const cardElement = cardTemplate.cloneNode(true);
+
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title");
+  const likeButton = cardElement.querySelector(".card__like-button");
+
+  cardImage.src = link;
+  cardImage.alt = name;
+  cardTitle.textContent = name;
+
+  // Like
+  likeButton.addEventListener("click", () => {
+    likeButton.classList.toggle("card__like-button_active");
+  });
+
+  // Popup de imagen
+  cardImage.addEventListener("click", () => {
+    openImagePopup(name, link);
+  });
+
+  // Insertar al principio
+  cardsContainer.prepend(cardElement);
+}
+
+// --------- CONTROLADOR DEL FORMULARIO DE NUEVA TARJETA ---------
+cardForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = titleInput.value.trim();
+  const link = urlInput.value.trim();
+
+  if (name && link) {
+    createCard(name, link);
+    cardForm.reset();
+    cardPopup.close(); // Cierra el dialog
+  }
 });
