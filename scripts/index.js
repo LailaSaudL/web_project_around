@@ -126,3 +126,11 @@ cardForm.addEventListener("submit", (e) => {
     cardPopup.close(); // Cierra el dialog
   }
 });
+
+// --------- BOTON PARA BORRAR TARJETAS ---------
+cardsContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("card__delete-button")) {
+    const card = e.target.closest(".card");
+    card.remove();
+  }
+});

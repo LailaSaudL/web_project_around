@@ -78,6 +78,27 @@ button {
   outline: none;
 }
 
+/* Delete botton */
+.card__delete-button {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  width: 21px;
+  height: 21px;
+  background-image: url("../images/Trash.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.card__delete-button:hover {
+  background-color: rgba(255, 251, 251, 0.57); /* #fffbfb92 en formato rgba */
+}
+
 /* Responsive cards */
 @media screen and (min-width: 768px) and (max-width: 1023px) {
   .gallery {
