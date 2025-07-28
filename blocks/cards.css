@@ -12,14 +12,12 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 280px;
+  width: 282px;
   border-radius: 10px;
   border: 1.5px solid rgba(0, 0, 0, 1);
   position: relative;
   overflow: hidden;
   background: #fff;
-  margin-bottom: 20px;
-  overflow: hidden;
 }
 
 .card__image {
@@ -72,7 +70,7 @@
   background-image: url("../images/favoriteblack.png");
 }
 
-button {
+.button {
   background-color: transparent;
   border: none;
   outline: none;
@@ -115,3 +113,9 @@ button {
     align-items: center;
     padding: 10px;
   }
+
+  .card {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}
