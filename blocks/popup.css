@@ -203,3 +203,20 @@
     right: -16px;
   }
 }
+
+.popup__button_disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.popup__input_type_error {
+  border-bottom: 2px solid red;
+}
+
+.popup__error_visible {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
