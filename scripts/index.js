@@ -147,27 +147,31 @@ enableValidation({
 
 
 
-// ---------CERRAR CON CLIC EN SUPERPOSICION---------
+// --------- CERRAR CON CLIC EN SUPERPOSICIÓN ---------
 document.querySelectorAll(".popup").forEach((popup) => {
   popup.addEventListener("mousedown", (evt) => {
-    if (evt.target.classList.contains("popup")) {
-      if (popup.tagName === "DIALOG") {
-        popup.close();
-      } else {
-        popup.classList.remove("popup_opened");
-      }
+    // si haces clic en el fondo oscuro (no en el contenido)
+    if (evt.target === popup) {
+      closePopup(popup);
     }
   });
 });
 
+// --------- CERRAR CON ESC ---------
+document.addEventListener("keydown", (evt) => {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".popup[open], .popup.popup_opened");
+    if (openedPopup) {
+      closePopup(openedPopup);
+    }
+  }
+});
 
-// ---------CERRAR CON ESC---------
+// --------- FUNCIÓN CLOSE POPUP (para ambos tipos: dialog o div) ---------
 function closePopup(popup) {
   if (popup.tagName === "DIALOG") {
-    popup.close();
+    popup.close(); // cerrar <dialog>
   } else {
-    popup.classList.remove("popup_opened");
+    popup.classList.remove("popup_opened"); // cerrar popup de imagen
   }
 }
-
-
