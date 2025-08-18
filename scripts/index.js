@@ -146,3 +146,18 @@ enableValidation({
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible"
 });
+
+popup.addEventListener("mousedown", (evt) => {
+  if (evt.target.classList.contains("popup")) {
+    closePopup(popup);
+  }
+});
+
+
+// ---------CERRAR CON CLIC EN SUPERPOSICION---------
+popup.addEventListener("mousedown", (evt) => {
+  if (evt.target.classList.contains("popup")) {
+    closePopup(popup);
+  }
+});
+
