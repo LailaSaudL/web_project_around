@@ -136,8 +136,6 @@ cardsContainer.addEventListener("click", (e) => {
 });
 
 // --------- VALIDACION DE POPUPS ---------
-import { enableValidation } from "./validate.js";
-
 enableValidation({
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
@@ -147,26 +145,29 @@ enableValidation({
   errorClass: "popup__error_visible"
 });
 
-popup.addEventListener("mousedown", (evt) => {
-  if (evt.target.classList.contains("popup")) {
-    closePopup(popup);
-  }
-});
 
 
 // ---------CERRAR CON CLIC EN SUPERPOSICION---------
-popup.addEventListener("mousedown", (evt) => {
-  if (evt.target.classList.contains("popup")) {
-    closePopup(popup);
-  }
+document.querySelectorAll(".popup").forEach((popup) => {
+  popup.addEventListener("mousedown", (evt) => {
+    if (evt.target.classList.contains("popup")) {
+      if (popup.tagName === "DIALOG") {
+        popup.close();
+      } else {
+        popup.classList.remove("popup_opened");
+      }
+    }
+  });
 });
 
+
 // ---------CERRAR CON ESC---------
-function handleEscClose(evt) {
-  if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_opened");
-    if (openedPopup) closePopup(openedPopup);
+function closePopup(popup) {
+  if (popup.tagName === "DIALOG") {
+    popup.close();
+  } else {
+    popup.classList.remove("popup_opened");
   }
 }
-document.addEventListener("keydown", handleEscClose);
+
 
