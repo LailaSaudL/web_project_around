@@ -1,3 +1,5 @@
+import { enableValidation, resetValidation } from "./validate.js";
+
 // --------- SELECCIÓN DE ELEMENTOS ---------
 const profilePopup = document.getElementById("profile-popup");
 const cardPopup = document.getElementById("card-popup");
@@ -135,22 +137,20 @@ cardsContainer.addEventListener("click", (e) => {
   }
 });
 
-// --------- VALIDACION DE POPUPS ---------
-enableValidation({
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible"
-});
-
-
+// --------- FUNCIÓN CLOSE POPUP (dialog o div) ---------
+function closePopup(popup) {
+  if (!popup) return;
+  if (popup.tagName === "DIALOG") {
+    popup.close();
+  } else {
+    popup.classList.remove("popup_opened"); // popup de imagen
+  }
+}
 
 // --------- CERRAR CON CLIC EN SUPERPOSICIÓN ---------
+// Usa "click" (mejor para touch) y cierra si el target es el overlay
 document.querySelectorAll(".popup").forEach((popup) => {
-  popup.addEventListener("mousedown", (evt) => {
-    // si haces clic en el fondo oscuro (no en el contenido)
+  popup.addEventListener("click", (evt) => {
     if (evt.target === popup) {
       closePopup(popup);
     }
@@ -167,11 +167,13 @@ document.addEventListener("keydown", (evt) => {
   }
 });
 
-// --------- FUNCIÓN CLOSE POPUP (para ambos tipos: dialog o div) ---------
-function closePopup(popup) {
-  if (popup.tagName === "DIALOG") {
-    popup.close(); // cerrar <dialog>
-  } else {
-    popup.classList.remove("popup_opened"); // cerrar popup de imagen
-  }
-}
+// Soporte del <dialog> para ESC
+[document.getElementById("profile-popup"), document.getElementById("card-popup")]
+  .forEach((dlg) => {
+    if (!dlg) return;
+    dlg.addEventListener("cancel", (e) => {
+      // evita comportamiento raro si tienes estilos personalizados
+      e.preventDefault();
+      dlg.close();
+    });
+  });
