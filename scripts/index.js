@@ -137,43 +137,44 @@ cardsContainer.addEventListener("click", (e) => {
   }
 });
 
-// --------- FUNCIÓN CLOSE POPUP (dialog o div) ---------
+// ---------- CIERRE GENÉRICO (overlay + ESC) ----------
+function isDialog(el) {
+  return el && el.tagName === "DIALOG";
+}
+
 function closePopup(popup) {
   if (!popup) return;
-  if (popup.tagName === "DIALOG") {
-    popup.close();
+  if (isDialog(popup)) {
+    popup.close();                 // <dialog>
   } else {
-    popup.classList.remove("popup_opened"); // popup de imagen
+    popup.classList.remove("popup_opened");  // div#popup-image
   }
 }
 
-// --------- CERRAR CON CLIC EN SUPERPOSICIÓN ---------
-// Usa "click" (mejor para touch) y cierra si el target es el overlay
+// Cerrar al hacer clic en la superposición (fuera del contenedor)
 document.querySelectorAll(".popup").forEach((popup) => {
-  popup.addEventListener("click", (evt) => {
-    if (evt.target === popup) {
-      closePopup(popup);
-    }
+  popup.addEventListener("mousedown", (evt) => {
+    // Si el click NO ocurrió dentro del contenido (.popup__container), es overlay
+    const clickedOutside = !evt.target.closest(".popup__container");
+    if (clickedOutside) closePopup(popup);
   });
 });
 
-// --------- CERRAR CON ESC ---------
-document.addEventListener("keydown", (evt) => {
-  if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".popup[open], .popup.popup_opened");
-    if (openedPopup) {
-      closePopup(openedPopup);
-    }
+// Cerrar con la tecla Esc
+function handleEscClose(evt) {
+  if (evt.key !== "Escape") return;
+
+  // Prioriza <dialog> abierto; si no, el popup de imagen
+  const openedDialog = document.querySelector("dialog.popup[open]");
+  if (openedDialog) {
+    closePopup(openedDialog);
+    return;
   }
-});
 
-// Soporte del <dialog> para ESC
-[document.getElementById("profile-popup"), document.getElementById("card-popup")]
-  .forEach((dlg) => {
-    if (!dlg) return;
-    dlg.addEventListener("cancel", (e) => {
-      // evita comportamiento raro si tienes estilos personalizados
-      e.preventDefault();
-      dlg.close();
-    });
-  });
+  const openedDivPopup = document.querySelector(".popup.popup_opened");
+  if (openedDivPopup) {
+    closePopup(openedDivPopup);
+  }
+}
+
+document.addEventListener("keydown", handleEscClose);
