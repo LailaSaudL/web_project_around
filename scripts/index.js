@@ -161,3 +161,12 @@ popup.addEventListener("mousedown", (evt) => {
   }
 });
 
+// ---------CERRAR CON ESC---------
+function handleEscClose(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_opened");
+    if (openedPopup) closePopup(openedPopup);
+  }
+}
+document.addEventListener("keydown", handleEscClose);
+
