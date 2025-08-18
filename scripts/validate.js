@@ -56,3 +56,16 @@ export function enableValidation(config) {
     setEventListeners(formElement, config);
   });
 }
+
+// Restablecer validación
+export function resetValidation(formElement, config) {
+  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+  const buttonElement = formElement.querySelector(config.submitButtonSelector);
+
+  inputList.forEach(inputElement => {
+    hideInputError(formElement, inputElement, config);
+  });
+
+  toggleButtonState(inputList, buttonElement, config);
+}
+
