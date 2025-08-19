@@ -82,12 +82,12 @@
   opacity: 0.7;
 }
 
-/* Estado normal (ACTIVO: visible) */
+/* Botón ACTIVO (cuando el formulario es válido) */
 .popup__button_save,
 .popup__button_add {
   width: 100%;
   height: 50px;
-  background: #000;   /* negro */
+  background: #000;   /* negro visible */
   color: #fff;        /* texto blanco */
   font-size: 18px;
   border: none;
@@ -102,11 +102,11 @@
   opacity: 0.8;
 }
 
-/* Estado INACTIVO (cuando no pasa validación) */
+/* Botón INACTIVO (cuando el formulario es inválido) */
 .popup__button_disabled {
-  background: #000; /* igual negro */
-  color: #fff;
-  opacity: 0.3;     /* se ve apagado */
+  background: #000;  /* mismo color de base */
+  color: #fff;       /* texto blanco */
+  opacity: 0.3;      /* atenuado para indicar inactivo */
   cursor: not-allowed;
 }
 
