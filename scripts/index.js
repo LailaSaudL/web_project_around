@@ -179,7 +179,6 @@ function handleEscClose(evt) {
 
 document.addEventListener("keydown", handleEscClose);
 
-
 // --------- ACTIVAR VALIDACIÓN ---------
 enableValidation({
   formSelector: ".popup__form",
