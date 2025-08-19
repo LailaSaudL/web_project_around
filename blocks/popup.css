@@ -82,7 +82,7 @@
   opacity: 0.7;
 }
 
-/* Estado normal (activo) */
+/* Estado normal (ACTIVO: visible) */
 .popup__button_save,
 .popup__button_add {
   width: 100%;
@@ -102,10 +102,11 @@
   opacity: 0.8;
 }
 
+/* Estado INACTIVO (cuando no pasa validación) */
 .popup__button_disabled {
-  background: #000;
+  background: #000; /* igual negro */
   color: #fff;
-  opacity: 0.3; /* más apagado */
+  opacity: 0.3;     /* se ve apagado */
   cursor: not-allowed;
 }
 
