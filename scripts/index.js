@@ -1,4 +1,5 @@
 import { enableValidation, resetValidation } from "./validate.js";
+import { openPopup, closePopup } from "./utils.js";
 
 // --------- SELECCIÓN DE ELEMENTOS ---------
 const profilePopup = document.getElementById("profile-popup");
@@ -32,11 +33,11 @@ const profileForm = document.getElementById("profile-form");
 editButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileText.textContent;
-  profilePopup.showModal();
+  openPopup(profilePopup);   // antes era profilePopup.showModal();
 });
 
 closeProfileButton.addEventListener("click", () => {
-  profilePopup.close();
+  closePopup(profilePopup);  // antes era profilePopup.close();
 });
 
 profileForm.addEventListener("submit", (e) => {
@@ -136,20 +137,6 @@ cardsContainer.addEventListener("click", (e) => {
     card.remove();
   }
 });
-
-// ---------- CIERRE GENÉRICO (overlay + ESC) ----------
-function isDialog(el) {
-  return el && el.tagName === "DIALOG";
-}
-
-function closePopup(popup) {
-  if (!popup) return;
-  if (isDialog(popup)) {
-    popup.close();                 // <dialog>
-  } else {
-    popup.classList.remove("popup_opened");  // div#popup-image
-  }
-}
 
 // Cerrar al hacer clic en la superposición (fuera del contenedor)
 document.querySelectorAll(".popup").forEach((popup) => {
