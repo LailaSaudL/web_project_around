@@ -49,11 +49,11 @@ profileForm.addEventListener("submit", (e) => {
 
 // Agregar tarjeta
 addCardButton.addEventListener("click", () => {
-  cardPopup.showModal();
+  openPopup(cardPopup);
 });
 
 closeCardButton.addEventListener("click", () => {
-  cardPopup.close();
+  closePopup(cardPopup);
 });
 
 // --------- POPUP DE IMAGEN FUNCIONAL ---------
@@ -67,11 +67,11 @@ function openImagePopup(name, link) {
   popupImageElement.src = link;
   popupImageElement.alt = name;
   popupImageTitle.textContent = name;
-  imagePopup.classList.add("popup_opened");
+  openPopup(imagePopup);
 }
 
 closeImageButton.addEventListener("click", () => {
-  imagePopup.classList.remove("popup_opened");
+   closePopup(imagePopup);
 });
 
 // Añadir evento a todas las imágenes existentes
@@ -126,7 +126,7 @@ cardForm.addEventListener("submit", (e) => {
   if (name && link) {
     createCard(name, link);
     cardForm.reset();
-    cardPopup.close(); // Cierra el dialog
+    closePopup(cardPopup); // Cierra el dialog
   }
 });
 
