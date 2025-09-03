@@ -1,4 +1,4 @@
-import { enableValidation, resetValidation } from "./validate.js";
+import { FormValidator } from "./FormValidator.js";
 import { openPopup, closePopup } from "./utils.js";
 
 // --------- SELECCIÓN DE ELEMENTOS ---------
@@ -167,11 +167,17 @@ function handleEscClose(evt) {
 document.addEventListener("keydown", handleEscClose);
 
 // --------- ACTIVAR VALIDACIÓN ---------
-enableValidation({
+const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible"
-});
+};
+
+const profileFormValidator = new FormValidator(validationConfig, profileForm);
+profileFormValidator.enableValidation();
+
+const cardFormValidator = new FormValidator(validationConfig, cardForm);
+cardFormValidator.enableValidation();
