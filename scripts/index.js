@@ -1,4 +1,3 @@
-// scripts/index.js
 import { api } from "./Api.js";
 import { Card } from "./components/Card.js";
 import { PopupWithImage } from "./components/PopupWithImage.js";
