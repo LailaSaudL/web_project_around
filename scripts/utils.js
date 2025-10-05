@@ -13,3 +13,22 @@ export function closePopup(popup) {
     popup.classList.remove("popup_opened");
   }
 }
+
+export function setButtonLoading(button, isLoading, loadingText = "Guardando...") {
+  if (!button) return;
+  if (isLoading) {
+    button.dataset.originalText = button.textContent;
+    button.textContent = loadingText;
+  } else {
+    button.textContent = button.dataset.originalText || button.textContent;
+  }
+}
+export function setButtonLoading(button, isLoading, loadingText = "Guardando...") {
+  if (!button) return;
+  if (isLoading) {
+    button.dataset.originalText = button.textContent;
+    button.textContent = loadingText;
+  } else {
+    button.textContent = button.dataset.originalText || button.textContent;
+  }
+}
