@@ -1,79 +1,76 @@
-export default class Api {
-  constructor(options) {
-    this._url = options.baseUrl;
-    this._headers = options.headers;
+export class Api {
+  constructor({ baseUrl, headers }) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
 
-  _checkResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
+  _checkRes(res) {
+    if (res.ok) return res.json();
     return Promise.reject(`Error: ${res.status}`);
   }
 
-  // Obtener info del usuario
+  // Info usuario
   getUserInfo() {
-    return fetch(`${this._url}/users/me`, {
-      headers: this._headers,
-    }).then(this._checkResponse);
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: this._headers
+    }).then(this._checkRes);
   }
 
-  // Actualizar perfil
-  updateUserInfo({ name, about }) {
-    return fetch(`${this._url}/users/me`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify({ name, about }),
-    }).then(this._checkResponse);
-  }
-
-  // Actualizar avatar
-  updateUserAvatar({ avatar }) {
-    return fetch(`${this._url}/users/me/avatar`, {
-      method: "PATCH",
-      headers: this._headers,
-      body: JSON.stringify({ avatar }),
-    }).then(this._checkResponse);
-  }
-
-  // Obtener tarjetas iniciales
+  // Tarjetas iniciales
   getInitialCards() {
-    return fetch(`${this._url}/cards`, {
+    return fetch(`${this._baseUrl}/cards`, {
+      headers: this._headers
+    }).then(this._checkRes);
+  }
+
+  // Editar perfil
+  setUserInfo({ name, about }) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "PATCH",
       headers: this._headers,
-    }).then(this._checkResponse);
+      body: JSON.stringify({ name, about })
+    }).then(this._checkRes);
   }
 
   // Agregar tarjeta
   addCard({ name, link }) {
-    return fetch(`${this._url}/cards`, {
+    return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: this._headers,
-      body: JSON.stringify({ name, link }),
-    }).then(this._checkResponse);
+      body: JSON.stringify({ name, link })
+    }).then(this._checkRes);
   }
 
   // Eliminar tarjeta
   deleteCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}`, {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
-      headers: this._headers,
-    }).then(this._checkResponse);
+      headers: this._headers
+    }).then(this._checkRes);
   }
 
-  // Dar like
-  likeCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
+  // Likes
+  addLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",
-      headers: this._headers,
-    }).then(this._checkResponse);
+      headers: this._headers
+    }).then(this._checkRes);
   }
 
-  // Quitar like
-  dislikeCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
+  removeLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "DELETE",
+      headers: this._headers
+    }).then(this._checkRes);
+  }
+
+  // Cambiar avatar
+  updateAvatar({ avatar }) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: "PATCH",
       headers: this._headers,
-    }).then(this._checkResponse);
+      body: JSON.stringify({ avatar })
+    }).then(this._checkRes);
   }
 }
 
