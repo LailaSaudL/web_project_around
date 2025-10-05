@@ -1,4 +1,3 @@
-// scripts/components/Card.js
 export class Card {
   constructor({ data, handleCardClick, handleDeleteClick, handleLikeToggle, currentUserId, templateSelector }) {
     this._name = data.name;
