@@ -4,7 +4,7 @@ export class Card {
     this._link = data.link;
     this._id = data._id;
     this._ownerId = data.owner;
-    this._likes = data.likes || []; // si tu API devuelve array likes
+    this._likes = data.likes || []; // si API devuelve array likes
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick; // abre confirm popup
@@ -37,28 +37,27 @@ export class Card {
   }
 
   _handleLikeClick() {
-    // delegate to provided handler which returns Promise
-    this._handleLikeToggle(this._id, this._isLiked())
-      .then((updatedCard) => {
-        this._likes = updatedCard.likes;
-        this._updateLikeView();
-      })
-      .catch(err => console.error(err));
-  }
+  this._handleLikeToggle(this._id, this._isLiked())
+    .then((updatedCard) => {
+      this._likes = updatedCard.likes; // actualizar desde servidor
+      this._updateLikeView();
+    })
+    .catch(err => console.error(err));
+}
 
-  _isLiked() {
-    return this._likes.some(u => u._id === this._currentUserId);
-  }
+_isLiked() {
+  return this._likes.some(user => user._id === this._currentUserId);
+}
 
-  _updateLikeView() {
-    if (this._isLiked()) {
-      this._likeButton.classList.add("card__like-button_active");
-    } else {
-      this._likeButton.classList.remove("card__like-button_active");
-    }
-    const counter = this._element.querySelector(".card__like-count");
-    if (counter) counter.textContent = this._likes.length;
+_updateLikeView() {
+  if (this._isLiked()) {
+    this._likeButton.classList.add("card__like-button_active");
+  } else {
+    this._likeButton.classList.remove("card__like-button_active");
   }
+  const counter = this._element.querySelector(".card__like-count");
+  if (counter) counter.textContent = this._likes.length;
+}
 
   removeCard() {
     this._element.remove();
