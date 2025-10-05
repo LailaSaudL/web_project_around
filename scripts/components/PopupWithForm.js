@@ -44,3 +44,22 @@ export class PopupWithForm extends Popup {
     this._form.reset();
   }
 }
+
+//Actualizar foto de perfil
+const avatarPopup = new PopupWithForm("#popup-avatar", (formValues) => {
+  return api.updateAvatar({ avatar: formValues.avatar })
+    .then((userData) => {
+      userInfo.setUserInfo({
+        name: userData.name,
+        about: userData.about,
+        avatar: userData.avatar
+      });
+    });
+});
+avatarPopup.setEventListeners();
+
+// abrir
+document.querySelector("#edit-avatar-button").addEventListener("click", () => {
+  avatarPopup.open();
+});
+
