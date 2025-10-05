@@ -12,9 +12,14 @@ export class Card {
     this._currentUserId = currentUserId;
   }
 
-  _getTemplate() {
-    return document.querySelector(this._templateSelector).content.querySelector(".card").cloneNode(true);
-  }
+ _getTemplate() {
+  return document
+    .querySelector(this._templateSelector)
+    .content
+    .querySelector(".card")
+    .cloneNode(true);
+}
+
 
   _setEventListeners() {
     this._likeButton = this._element.querySelector(".card__like-button");
