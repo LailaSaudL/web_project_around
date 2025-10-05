@@ -1,109 +1,146 @@
+// scripts/index.js
 import { FormValidator } from "./FormValidator.js";
-import { Card } from "./Card.js";
-import { PopupWithImage } from "./components/PopupWithImage.js";
-import { PopupWithForm } from "./components/PopupWithForm.js";
-import { UserInfo } from "./components/UserInfo.js";
+import { Card } from "./components/Card.js";
 import { Section } from "./components/Section.js";
+import { UserInfo } from "./components/UserInfo.js";
+import { PopupWithForm } from "./components/PopupWithForm.js";
+import { PopupWithImage } from "./components/PopupWithImage.js";
+import { PopupWithConfirmation } from "./components/PopupWithConfirmation.js";
+import { api } from "./Api.js";
 
-// ---------- Configuración ----------
+// --------- CONFIG ---------
 const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible"
+  errorClass: "popup__error_visible",
 };
 
-const cardTemplateSelector = "#card-template";
-const cardsContainerSelector = "#cards-container";
+// --------- ELEMENTOS ---------
+const profilePopupSelector = "#profile-popup";
+const cardPopupSelector = "#card-popup";
+const avatarPopupSelector = "#avatar-popup";
+const confirmPopupSelector = "#confirm-popup";
+const imagePopupSelector = "#popup-image";
 
-// ---------- Instancias ----------
+const profileForm = document.querySelector("#profile-form");
+const cardForm = document.querySelector("#card-form");
+const avatarForm = document.querySelector("#avatar-form");
+
+const editButton = document.querySelector("#edit-button");
+const addCardButton = document.querySelector("#add-card");
+const avatarButton = document.querySelector("#avatar-button");
+
+// --------- INSTANCIAS ---------
 const userInfo = new UserInfo({
   nameSelector: ".profile__name",
-  jobSelector: ".profile__text"
+  aboutSelector: ".profile__text",
+  avatarSelector: ".profile__avatar",
 });
 
-const popupWithImage = new PopupWithImage("#popup-image");
+let currentUserId;
+
+// Popup imagen
+const popupWithImage = new PopupWithImage(imagePopupSelector);
 popupWithImage.setEventListeners();
 
-// Generador de tarjetas
+// Popup confirmar
+const popupWithConfirm = new PopupWithConfirmation(confirmPopupSelector);
+popupWithConfirm.setEventListeners();
+
+// Section de tarjetas
+const cardSection = new Section(
+  (item) => {
+    const cardElement = createCard(item);
+    cardSection.addItem(cardElement);
+  },
+  "#cards-container"
+);
+
+// --------- FUNCIONES ---------
 function createCard(data) {
   const card = new Card({
     data,
-    currentUserId: userId,
+    currentUserId,
     templateSelector: "#card-template",
     handleCardClick: ({ name, link }) => popupWithImage.open(name, link),
     handleDeleteClick: (cardInstance) => {
-      popupWithConfirmation.setSubmitAction(() => {
-        return api.deleteCard(cardInstance._id)
-          .then(() => {
-            cardInstance.removeCard();
-          });
-      });
-      popupWithConfirmation.open();
+      popupWithConfirm.open();
+      popupWithConfirm.setSubmitAction(() =>
+        api.deleteCard(cardInstance._id).then(() => {
+          cardInstance.removeCard();
+        })
+      );
     },
     handleLikeToggle: (cardId, isLiked) => {
-      if (isLiked) {
-        return api.removeLike(cardId);
-      } else {
-        return api.addLike(cardId);
-      }
-    }
+      return isLiked ? api.removeLike(cardId) : api.addLike(cardId);
+    },
   });
   return card.generateCard();
 }
 
-// Sección de tarjetas iniciales
-const initialCards = [
-  { name: "Valle de Yosemite", link: "images/valledeyosemite.png" },
-  { name: "Lago Louise", link: "images/lagolouise.png" }
-  // ... más si quieres
-];
-
-const cardSection = new Section(
-  { items: initialCards, renderer: (item) => cardSection.addItem(createCard(item), false) },
-  cardsContainerSelector
-);
-cardSection.renderItems();
-
-// Popup editar perfil
-const popupProfile = new PopupWithForm("#profile-popup", (formData, popup) => {
-  userInfo.setUserInfo({
-    name: formData["name-profile"],
-    job: formData["job-profile"]
-  });
-  popup.close();
+// --------- POPUPS DE FORM ---------
+const popupEditProfile = new PopupWithForm(profilePopupSelector, (formData) => {
+  return api.setUserInfo({ name: formData["name-profile"], about: formData["job-profile"] })
+    .then((res) => {
+      userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
+    });
 });
-popupProfile.setEventListeners();
+popupEditProfile.setEventListeners();
 
-// Popup nueva tarjeta
-const popupCard = new PopupWithForm("#card-popup", (formData, popup) => {
-  const newCard = createCard({
-    name: formData["card-title"],
-    link: formData["card-url"]
-  });
-  cardSection.addItem(newCard, true); // prepend
-  popup.close();
+const popupAddCard = new PopupWithForm(cardPopupSelector, (formData) => {
+  return api.addCard({ name: formData["card-title"], link: formData["card-url"] })
+    .then((newCard) => {
+      const cardElement = createCard(newCard);
+      cardSection.addItem(cardElement);
+    });
 });
-popupCard.setEventListeners();
+popupAddCard.setEventListeners();
 
-// ---------- Botones de apertura ----------
-document.getElementById("edit-button").addEventListener("click", () => {
-  const { name, job } = userInfo.getUserInfo();
-  document.getElementById("name-profile").value = name;
-  document.getElementById("job-profile").value = job;
-  popupProfile.open();
+const popupUpdateAvatar = new PopupWithForm(avatarPopupSelector, (formData) => {
+  return api.updateAvatar({ avatar: formData["avatar-url"] })
+    .then((res) => {
+      userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
+    });
+});
+popupUpdateAvatar.setEventListeners();
+
+// --------- VALIDADORES ---------
+const profileValidator = new FormValidator(validationConfig, profileForm);
+profileValidator.enableValidation();
+
+const cardValidator = new FormValidator(validationConfig, cardForm);
+cardValidator.enableValidation();
+
+const avatarValidator = new FormValidator(validationConfig, avatarForm);
+avatarValidator.enableValidation();
+
+// --------- EVENTOS DE BOTONES ---------
+editButton.addEventListener("click", () => {
+  const { name, about } = userInfo.getUserInfo();
+  profileForm.querySelector("#name-profile").value = name;
+  profileForm.querySelector("#job-profile").value = about;
+  profileValidator.resetValidation();
+  popupEditProfile.open();
 });
 
-document.getElementById("add-card").addEventListener("click", () => {
-  popupCard.open();
+addCardButton.addEventListener("click", () => {
+  cardValidator.resetValidation();
+  popupAddCard.open();
 });
 
-const popupWithConfirmation = new PopupWithConfirmation("#popup-confirm");
-popupWithConfirmation.setEventListeners();
+avatarButton.addEventListener("click", () => {
+  avatarValidator.resetValidation();
+  popupUpdateAvatar.open();
+});
 
-// ---------- Validación ----------
-new FormValidator(validationConfig, document.querySelector("#profile-form")).enableValidation();
-new FormValidator(validationConfig, document.querySelector("#card-form")).enableValidation();
-
+// --------- CARGA INICIAL ---------
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, initialCards]) => {
+    currentUserId = userData._id;
+    userInfo.setUserInfo({ name: userData.name, about: userData.about, avatar: userData.avatar });
+    cardSection.renderItems(initialCards);
+  })
+  .catch((err) => console.error(err));
