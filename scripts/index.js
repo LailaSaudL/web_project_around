@@ -111,14 +111,16 @@ function handleLikeToggle(cardId, isLiked) {
 // Abrir confirm y registrar la acción de borrado
 function handleDeleteClick(cardInstance) {
   // cardInstance es la instancia de Card (tu Card pasa `this` cuando llama al handler)
-  confirmPopup.setSubmitAction(() => {
-    // debe devolver Promise
-    return api.deleteCard(cardInstance._id).then(() => {
-      cardInstance.removeCard(); // elimina del DOM
-    });
-  });
-  confirmPopup.open();
-}
+ confirmPopup.setSubmitAction(() => {
+  api.deleteCard(cardInstance._id)
+    .then(() => {
+      cardInstance.removeCard();
+      confirmPopup.close();
+    })
+    .catch((err) => console.log("Error eliminando:", err));
+});
+confirmPopup.open();
+
 
 function createCard(data) {
   const card = new Card(
