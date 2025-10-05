@@ -1,5 +1,3 @@
-// scripts/FormValidator.js
-
 export class FormValidator {
   constructor(config, formElement) {
     this._config = config;
