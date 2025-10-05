@@ -1,3 +1,4 @@
+// scripts/Api.js
 export class Api {
   constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
@@ -10,11 +11,13 @@ export class Api {
   }
 
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers }).then(this._checkRes);
+    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers })
+      .then(this._checkRes);
   }
 
   getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, { headers: this._headers }).then(this._checkRes);
+    return fetch(`${this._baseUrl}/cards`, { headers: this._headers })
+      .then(this._checkRes);
   }
 
   setUserInfo({ name, about }) {
@@ -63,12 +66,11 @@ export class Api {
   }
 }
 
-// Export instancia
+// ⚠️ CAMBIA "web_es_09" por tu cohort real
 export const api = new Api({
-  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  baseUrl: "https://around-api.es.tripleten-services.com/v1/web_es_09",
   headers: {
-    authorization: "5fa39235-7259-42f2-8b5e-c40c22d5e3ec", // tu token real
+    authorization: "327f677d-2fa5-4635-8f0a-94301860a124",
     "Content-Type": "application/json",
   },
 });
-
