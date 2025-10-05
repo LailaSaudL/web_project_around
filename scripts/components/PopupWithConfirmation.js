@@ -8,18 +8,15 @@ export class PopupWithConfirmation extends Popup {
     this._handleSubmit = this._handleSubmit.bind(this);
   }
 
-  setSubmitAction(action) {
-    // action: () => Promise
-    this._submitHandler = action;
-  }
+setSubmitAction(action) {
+  this._handleSubmit = action;
+}
 
   _handleSubmit(evt) {
     evt.preventDefault();
-    if (!this._submitHandler) return;
-    this._submitHandler()
-      .then(() => this.close())
-      .catch(err => console.error(err));
-  }
+    if (this._handleSubmit) {
+  this._handleSubmit();
+}
 
   setEventListeners() {
     super.setEventListeners();
