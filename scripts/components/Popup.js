@@ -1,48 +1,46 @@
 export class Popup {
   constructor(popupSelector) {
-    this.popup = typeof popupSelector === 'string'
+    this._popup = typeof popupSelector === "string"
       ? document.querySelector(popupSelector)
       : popupSelector;
     this._handleEscClose = this._handleEscClose.bind(this);
   }
 
   open() {
-    if (!this.popup) return;
-    if (this.popup.tagName === 'DIALOG') {
-      this.popup.showModal();
+    if (!this._popup) return;
+    if (this._popup.tagName === "DIALOG") {
+      this._popup.showModal();
     } else {
-      this.popup.classList.add('popup_opened');
+      this._popup.classList.add("popup_opened");
     }
-    document.addEventListener('keydown', this._handleEscClose);
+    document.addEventListener("keydown", this._handleEscClose);
   }
 
   close() {
-    if (!this.popup) return;
-    if (this.popup.tagName === 'DIALOG') {
-      this.popup.close();
+    if (!this._popup) return;
+    if (this._popup.tagName === "DIALOG") {
+      this._popup.close();
     } else {
-      this.popup.classList.remove('popup_opened');
+      this._popup.classList.remove("popup_opened");
     }
-    document.removeEventListener('keydown', this._handleEscClose);
+    document.removeEventListener("keydown", this._handleEscClose);
   }
 
   _handleEscClose(evt) {
-    if (evt.key === 'Escape') {
+    if (evt.key === "Escape") {
       this.close();
     }
   }
 
   setEventListeners() {
-    if (!this.popup) return;
-    // close button(s)
-    const closeBtn = this.popup.querySelector('.popup__button_close, .popup__exit');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => this.close());
-    }
-    // click overlay: if click target is popup root, close
-    this.popup.addEventListener('click', (evt) => {
-      if (evt.target === this.popup) this.close();
+    if (!this._popup) return;
+    // botones de cierre (puede haber más de uno)
+    const closeBtns = Array.from(this._popup.querySelectorAll(".popup__button_close, .popup__exit"));
+    closeBtns.forEach(btn => btn.addEventListener("click", () => this.close()));
+
+    // click en overlay: si el target es el root (.popup) => cerrar
+    this._popup.addEventListener("click", (evt) => {
+      if (evt.target === this._popup) this.close();
     });
   }
 }
-
