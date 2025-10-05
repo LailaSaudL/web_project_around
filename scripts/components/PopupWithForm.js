@@ -1,61 +1,46 @@
-import { Popup } from './Popup.js';
+// /scripts/components/PopupWithForm.js
+import { Popup } from "./Popup.js";
 
 export class PopupWithForm extends Popup {
   constructor(popupSelector, handleFormSubmit) {
     super(popupSelector);
     this._handleFormSubmit = handleFormSubmit;
-    this._form = this.popup.querySelector('.popup__form');
-    this._inputList = Array.from(this._form ? this._form.querySelectorAll('.popup__input') : []);
-    this._submitButton = this._form ? this._form.querySelector('.popup__button') : null;
-    this._onSubmit = this._onSubmit.bind(this);
+    this._form = this._popup.querySelector(".popup__form");
+    this._inputList = Array.from(this._form.querySelectorAll(".popup__input"));
+    this._submitButton = this._form.querySelector(".popup__button");
+    this._submitBtnInitialText = this._submitButton.textContent;
   }
 
   _getInputValues() {
     const values = {};
-    this._inputList.forEach(input => {
-      values[input.id || input.name] = input.value;
+    this._inputList.forEach((input) => {
+      values[input.name] = input.value; // usa "name" en vez de id para consistencia
     });
     return values;
   }
 
-  _onSubmit(evt) {
-    evt.preventDefault();
-    this._handleFormSubmit(this._getInputValues(), this);
-  }
-
   setEventListeners() {
     super.setEventListeners();
-    if (this._form) this._form.addEventListener('submit', this._onSubmit);
+    this._form.addEventListener("submit", (evt) => {
+      evt.preventDefault();
+      this._renderLoading(true);
+      this._handleFormSubmit(this._getInputValues())
+        .then(() => this.close())
+        .catch((err) => console.error(err))
+        .finally(() => this._renderLoading(false));
+    });
+  }
+
+  _renderLoading(isLoading, loadingText = "Guardando...") {
+    if (isLoading) {
+      this._submitButton.textContent = loadingText;
+    } else {
+      this._submitButton.textContent = this._submitBtnInitialText;
+    }
   }
 
   close() {
     super.close();
-    if (this._form) this._form.reset();
+    this._form.reset();
   }
-}
-
-
-// dentro de PopupWithForm class
-open() {
-  super.open();
-  // (opcional) resetValidation aquí
-}
-
-setEventListeners() {
-  super.setEventListeners();
-  this._form.addEventListener("submit", (evt) => {
-    evt.preventDefault();
-    const submitBtn = this._form.querySelector("button[type='submit']");
-    const initialText = submitBtn.textContent;
-    submitBtn.textContent = "Guardando...";
-    // execute external handler which should return a Promise
-    this._handleFormSubmit(this._getInputValues())
-      .then(() => {
-        this.close();
-      })
-      .catch(err => console.error(err))
-      .finally(() => {
-        submitBtn.textContent = initialText;
-      });
-  });
 }
