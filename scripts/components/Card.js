@@ -3,7 +3,7 @@ export class Card {
     this._name = data.name;
     this._link = data.link;
     this._id = data._id;
-    this._ownerId = data.owner;
+    this._ownerId = data.owner && data.owner._id ? data.owner._id : data.owner;
     this._likes = data.likes || []; // si API devuelve array likes
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
