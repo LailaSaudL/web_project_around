@@ -208,6 +208,32 @@
       </template>
     </section>
 
+    <!-- Popup confirmar borrado -->
+<div class="popup" id="confirm-popup">
+  <div class="popup__container">
+    <form class="popup__form" id="confirm-form">
+      <h2 class="popup__title">¿Eliminar tarjeta?</h2>
+      <button type="submit" class="popup__button popup__button_delete">Sí, eliminar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Popup: Editar avatar -->
+<dialog class="popup" id="avatar-popup">
+  <div class="popup__container">
+    <button class="popup__button popup__button_close" id="close-avatar">X</button>
+    <form class="popup__form" id="avatar-form">
+      <h2 class="popup__title">Actualizar avatar</h2>
+      <input type="url" id="avatar-url" class="popup__input" placeholder="URL de la imagen" required>
+      <span id="avatar-url-error" class="popup__error"></span>
+      <button type="submit" class="popup__button popup__button_save">Guardar</button>
+    </form>
+  </div>
+</dialog>
+
+<!-- Botón para abrir avatar form (coloca encima de la avatar img en tu perfil) -->
+<button id="edit-avatar" class="profile__avatar-edit" aria-label="Editar avatar"></button>
+
 
     <!-- Scripts -->
 <script type="module" src="scripts/index.js"></script>
