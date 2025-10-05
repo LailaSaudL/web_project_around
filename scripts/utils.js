@@ -1,4 +1,5 @@
 export function openPopup(popup) {
+  if (!popup) return;
   if (popup.tagName === "DIALOG") {
     popup.showModal();
   } else {
@@ -7,6 +8,7 @@ export function openPopup(popup) {
 }
 
 export function closePopup(popup) {
+  if (!popup) return;
   if (popup.tagName === "DIALOG") {
     popup.close();
   } else {
@@ -14,15 +16,6 @@ export function closePopup(popup) {
   }
 }
 
-export function setButtonLoading(button, isLoading, loadingText = "Guardando...") {
-  if (!button) return;
-  if (isLoading) {
-    button.dataset.originalText = button.textContent;
-    button.textContent = loadingText;
-  } else {
-    button.textContent = button.dataset.originalText || button.textContent;
-  }
-}
 export function setButtonLoading(button, isLoading, loadingText = "Guardando...") {
   if (!button) return;
   if (isLoading) {
