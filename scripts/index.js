@@ -120,18 +120,21 @@ function handleDeleteClick(cardInstance) {
   confirmPopup.open();
 }
 
-function createCard(cardData) {
-  const card = new Card({
-    data: cardData,
-    handleCardClick: (payload) => handleCardClick(payload),
-    handleDeleteClick: (instance) => handleDeleteClick(instance),
-    handleLikeToggle: (cardId, isLiked) => handleLikeToggle(cardId, isLiked),
-    currentUserId,
-    templateSelector: "#card-template",
-  });
+function createCard(data) {
+  const card = new Card(
+    {
+      name: data.name,
+      link: data.link,
+      cardId: data._id, // 👈 IMPORTANTE: pasar _id directo
+    },
+    "#card-template",
+    (payload) => handleCardClick(payload),
+    (cardId, cardElement) => handleDeleteClick(cardId, cardElement)
+  );
 
   return card.generateCard();
 }
+
 
 // ----- CARGA INICIAL (usuario + tarjetas) -----
 Promise.all([api.getUserInfo(), api.getInitialCards()])
