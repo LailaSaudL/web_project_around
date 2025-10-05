@@ -28,9 +28,28 @@ const popupWithImage = new PopupWithImage("#popup-image");
 popupWithImage.setEventListeners();
 
 // Generador de tarjetas
-function createCard(item) {
-  const card = new Card(item, cardTemplateSelector, (name, link) => {
-    popupWithImage.open(name, link);
+function createCard(data) {
+  const card = new Card({
+    data,
+    currentUserId: userId,
+    templateSelector: "#card-template",
+    handleCardClick: ({ name, link }) => popupWithImage.open(name, link),
+    handleDeleteClick: (cardInstance) => {
+      popupWithConfirmation.setSubmitAction(() => {
+        return api.deleteCard(cardInstance._id)
+          .then(() => {
+            cardInstance.removeCard();
+          });
+      });
+      popupWithConfirmation.open();
+    },
+    handleLikeToggle: (cardId, isLiked) => {
+      if (isLiked) {
+        return api.removeLike(cardId);
+      } else {
+        return api.addLike(cardId);
+      }
+    }
   });
   return card.generateCard();
 }
