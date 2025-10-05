@@ -1,3 +1,4 @@
+// scripts/index.js
 import { api } from "./Api.js";
 import { Card } from "./components/Card.js";
 import { PopupWithImage } from "./components/PopupWithImage.js";
@@ -6,25 +7,23 @@ import { PopupWithConfirmation } from "./components/PopupWithConfirmation.js";
 import { UserInfo } from "./components/UserInfo.js";
 import { FormValidator } from "./FormValidator.js";
 
-// ----- SELECTORES / ELEMENTOS -----
+// ----- SELECTORES -----
 const profileEditBtn = document.getElementById("edit-button");
-const profileCloseBtn = document.getElementById("close-button");
 const addCardBtn = document.getElementById("add-card");
-const addCardCloseBtn = document.getElementById("close-card");
+const avatarEditBtn = document.getElementById("edit-avatar");
 
 const profileForm = document.getElementById("profile-form");
 const cardForm = document.getElementById("card-form");
-const avatarForm = document.getElementById("avatar-form"); // (ver HTML que incluyo abajo)
+const avatarForm = document.getElementById("avatar-form");
 
 const nameInput = document.getElementById("name-profile");
 const jobInput = document.getElementById("job-profile");
 
 const cardsContainer = document.getElementById("cards-container");
 
-// ----- INSTANCIAS UTILES -----
 let currentUserId = null;
 
-// userInfo maneja texto y avatar en DOM (implementa setUserInfo, setUserAvatar en tu UserInfo.js)
+// ----- INSTANCIAS -----
 const userInfo = new UserInfo({
   nameSelector: ".profile__name",
   aboutSelector: ".profile__text",
@@ -38,38 +37,37 @@ imagePopup.setEventListeners();
 const confirmPopup = new PopupWithConfirmation("#confirm-popup");
 confirmPopup.setEventListeners();
 
-// Profile popup (editar nombre + job)
 const profilePopup = new PopupWithForm("#profile-popup", (formValues) => {
-  // formValues expected keys: { 'name-profile': '...', 'job-profile': '...' } depending how inputs are named/ids
-  return api.setUserInfo({
-    name: formValues["name-profile"] || formValues.name,
-    about: formValues["job-profile"] || formValues.about,
-  }).then((updatedUser) => {
-    userInfo.setUserInfo({
-      name: updatedUser.name,
-      about: updatedUser.about,
+  return api
+    .setUserInfo({
+      name: formValues.name,
+      about: formValues.about,
+    })
+    .then((updatedUser) => {
+      userInfo.setUserInfo({
+        name: updatedUser.name,
+        about: updatedUser.about,
+      });
     });
-  });
 });
 profilePopup.setEventListeners();
 
-// Add card popup
 const addCardPopup = new PopupWithForm("#card-popup", (formValues) => {
-  return api.addCard({
-    name: formValues["card-title"] || formValues.name,
-    link: formValues["card-url"] || formValues.link,
-  }).then((newCardData) => {
-    // newCardData is the card object returned by server (with _id, owner, likes...)
-    const cardEl = createCard(newCardData);
-    cardsContainer.prepend(cardEl);
-  });
+  return api
+    .addCard({
+      name: formValues.name,
+      link: formValues.link,
+    })
+    .then((newCardData) => {
+      const cardEl = createCard(newCardData);
+      cardsContainer.prepend(cardEl);
+    });
 });
 addCardPopup.setEventListeners();
 
-// Avatar popup
 const avatarPopup = new PopupWithForm("#avatar-popup", (formValues) => {
-  // espera objeto { 'avatar-url': 'https://...' } (según id de input)
-  return api.updateAvatar({ avatar: formValues["avatar-url"] || formValues.avatar })
+  return api
+    .updateAvatar({ avatar: formValues.avatar })
     .then((updatedUser) => {
       userInfo.setUserAvatar(updatedUser.avatar);
     });
@@ -90,17 +88,15 @@ const profileValidator = new FormValidator(validationConfig, profileForm);
 profileValidator.enableValidation();
 const cardValidator = new FormValidator(validationConfig, cardForm);
 cardValidator.enableValidation();
-const avatarValidator = avatarForm ? new FormValidator(validationConfig, avatarForm) : null;
-if (avatarValidator) avatarValidator.enableValidation();
+const avatarValidator = new FormValidator(validationConfig, avatarForm);
+avatarValidator.enableValidation();
 
-// ----- FUNCIONES PARA CARDS / HANDLERS -----
+// ----- FUNCIONES -----
 function handleCardClick({ name, link }) {
-  imagePopup.open({ name, link }); // PopupWithImage.open recibe {name, link} según tu implementación
+  imagePopup.open({ name, link });
 }
 
-// Devuelve función que togglea like a través del API y devuelve Promise con carta actualizada
 function handleLikeToggle(cardId, isLiked) {
-  // isLiked = boolean (si ya estaba like antes de click)
   if (isLiked) {
     return api.removeLike(cardId);
   } else {
@@ -108,79 +104,58 @@ function handleLikeToggle(cardId, isLiked) {
   }
 }
 
-// Abrir confirm y registrar la acción de borrado
 function handleDeleteClick(cardInstance) {
-  // cardInstance es la instancia de Card (tu Card pasa `this` cuando llama al handler)
- confirmPopup.setSubmitAction(() => {
-  api.deleteCard(cardInstance._id)
-    .then(() => {
+  confirmPopup.setSubmitAction(() => {
+    return api.deleteCard(cardInstance._id).then(() => {
       cardInstance.removeCard();
-      confirmPopup.close();
-    })
-    .catch((err) => console.log("Error eliminando:", err));
-});
-confirmPopup.open();
+    });
+  });
+  confirmPopup.open();
+}
 
-
-function createCard(data) {
-  const card = new Card(
-    {
-      name: data.name,
-      link: data.link,
-      cardId: data._id, // 👈 IMPORTANTE: pasar _id directo
-    },
-    "#card-template",
-    (payload) => handleCardClick(payload),
-    (cardId, cardElement) => handleDeleteClick(cardId, cardElement)
-  );
+function createCard(cardData) {
+  const card = new Card({
+    data: cardData,
+    handleCardClick: (payload) => handleCardClick(payload),
+    handleDeleteClick: (instance) => handleDeleteClick(instance),
+    handleLikeToggle: (cardId, isLiked) => handleLikeToggle(cardId, isLiked),
+    currentUserId,
+    templateSelector: "#card-template",
+  });
 
   return card.generateCard();
 }
 
-
-// ----- CARGA INICIAL (usuario + tarjetas) -----
+// ----- CARGA INICIAL -----
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, initialCards]) => {
     currentUserId = userData._id;
 
-    // Actualiza perfil en UI
     userInfo.setUserInfo({ name: userData.name, about: userData.about });
     userInfo.setUserAvatar(userData.avatar);
 
-    // Render tarjetas (si quieres las últimas primero: reverse())
     initialCards.reverse().forEach((cardData) => {
       const cardEl = createCard(cardData);
       cardsContainer.append(cardEl);
     });
   })
-  .catch((err) => {
-    console.error("Error cargando datos iniciales:", err);
-  });
+  .catch((err) => console.error("Error inicial:", err));
 
-// ----- EVENTOS UI -----
-// Editar perfil
+// ----- EVENTOS -----
 profileEditBtn.addEventListener("click", () => {
-  const { name, about } = userInfo.getUserInfo(); // espera que UserInfo tenga getUserInfo()
+  const { name, about } = userInfo.getUserInfo();
   nameInput.value = name || "";
   jobInput.value = about || "";
   profileValidator.resetValidation();
   profilePopup.open();
 });
 
-// Cerrar profile popup con su botón si lo deseas (o utiliza PopupWithForm.close dentro)
-profileCloseBtn.addEventListener("click", () => profilePopup.close());
-
-// Añadir tarjeta
 addCardBtn.addEventListener("click", () => {
   cardValidator.resetValidation();
   addCardPopup.open();
 });
 
-// Avatar editar: botón que debes añadir en HTML (ver más abajo)
-const avatarEditBtn = document.getElementById("edit-avatar");
-if (avatarEditBtn) {
-  avatarEditBtn.addEventListener("click", () => {
-    if (avatarValidator) avatarValidator.resetValidation();
-    avatarPopup.open();
-  });
-}
+avatarEditBtn.addEventListener("click", () => {
+  avatarValidator.resetValidation();
+  avatarPopup.open();
+});
