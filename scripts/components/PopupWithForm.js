@@ -33,3 +33,29 @@ export class PopupWithForm extends Popup {
     if (this._form) this._form.reset();
   }
 }
+
+
+// dentro de PopupWithForm class
+open() {
+  super.open();
+  // (opcional) resetValidation aquí
+}
+
+setEventListeners() {
+  super.setEventListeners();
+  this._form.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+    const submitBtn = this._form.querySelector("button[type='submit']");
+    const initialText = submitBtn.textContent;
+    submitBtn.textContent = "Guardando...";
+    // execute external handler which should return a Promise
+    this._handleFormSubmit(this._getInputValues())
+      .then(() => {
+        this.close();
+      })
+      .catch(err => console.error(err))
+      .finally(() => {
+        submitBtn.textContent = initialText;
+      });
+  });
+}
