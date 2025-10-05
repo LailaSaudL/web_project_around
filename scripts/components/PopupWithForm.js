@@ -57,3 +57,12 @@ export class PopupWithForm extends Popup {
     if (this._form) this._form.reset();
   }
 }
+
+
+setLoading(isLoading, text = "Guardando...") {
+  if (isLoading) {
+    this._submitButton.textContent = text;
+  } else {
+    this._submitButton.textContent = this._defaultText;
+  }
+}
