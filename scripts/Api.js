@@ -67,7 +67,8 @@ export class Api {
 export const api = new Api({
   baseUrl: "https://around-api.es.tripleten-services.com/v1",
   headers: {
-    authorization: "5fa39235-7259-42f2-8b5e-c40c22d5e3ec", // tu token
+    authorization: "5fa39235-7259-42f2-8b5e-c40c22d5e3ec", // tu token real
     "Content-Type": "application/json",
   },
 });
+
