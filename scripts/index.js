@@ -100,6 +100,10 @@ document.getElementById("add-card").addEventListener("click", () => {
   popupCard.open();
 });
 
+const popupWithConfirmation = new PopupWithConfirmation("#popup-confirm");
+popupWithConfirmation.setEventListeners();
+
 // ---------- Validación ----------
 new FormValidator(validationConfig, document.querySelector("#profile-form")).enableValidation();
 new FormValidator(validationConfig, document.querySelector("#card-form")).enableValidation();
+
