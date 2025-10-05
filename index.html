@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Explora paisajes de los Estados Unidos." />
     <meta name="author" content="Laila Saud Laborde" />
-    <meta name="keywords" content="Naturaleza, Viaje, Amventura, Parques Nacionales" />
+    <meta name="keywords" content="Naturaleza, Viaje, Aventura, Parques Nacionales" />
     <title>Alrededor de los EE.UU</title>
-   <link rel="stylesheet" href="./pages/index.css" />
-
+    <link rel="stylesheet" href="./pages/index.css" />
     <link rel="shortcut icon" href="./favicon.ico" />
   </head>
 
@@ -20,11 +19,15 @@
 
       <main class="content">
         <section class="profile">
-          <img
-            class="profile__avatar"
-            src="images/avatar.jpg"
-            alt="Avatar del usuario"
-          />
+          <div class="profile__avatar-container">
+            <img
+              class="profile__avatar"
+              src="./images/avatar.jpg"
+              alt="Avatar del usuario"
+            />
+            <!-- Botón de edición de avatar -->
+            <button id="edit-avatar" class="profile__avatar-edit" aria-label="Editar avatar"></button>
+          </div>
           <div class="profile__info">
             <div class="profile__details">
               <h1 class="profile__name">Jacques Cousteau</h1>
@@ -47,70 +50,20 @@
           </button>
         </section>
 
-        <section class="gallery" id="cards-container">
-          <!-- Tarjetas (6) -->
-          <div class="card">
-            <img class="card__image" src="images/valledeyosemite.png" alt="Valle de Yosemite" />
-            <div class="card__content">
-              <p class="card__title">Valle de Yosemite</p>
-             <button class="card__like-button"></button>
-             <button class="card__delete-button" type="button"></button>
-            </div>
-          </div>
-          <div class="card">
-            <img class="card__image" src="images/lagolouise.png" alt="Lago Louise" />
-            <div class="card__content">
-              <p class="card__title">Lago Louise</p>
-              <button class="card__like-button"></button>
-              <button class="card__delete-button" type="button"></button>
-            </div>
-          </div>
-          <div class="card">
-            <img class="card__image" src="images/montañascalvas.png" alt="Montañas Calvas" />
-            <div class="card__content">
-              <p class="card__title">Montañas Calvas</p>
-              <button class="card__like-button"></button>
-              <button class="card__delete-button" type="button"></button>
-            </div>
-          </div>
-          <div class="card">
-            <img class="card__image" src="images/latemar.png" alt="Latemar" />
-            <div class="card__content">
-              <p class="card__title">Latemar</p>
-              <button class="card__like-button"></button>
-              <button class="card__delete-button" type="button"></button>
-            </div>
-          </div>
-          <div class="card">
-            <img class="card__image" src="images/vanoisnationalpark.png" alt="Vanois National" />
-            <div class="card__content">
-              <p class="card__title">Vanois National Park</p>
-              <button class="card__like-button"></button>
-              <button class="card__delete-button" type="button"></button>
-            </div>
-          </div>
-          <div class="card">
-            <img class="card__image" src="images/lagodibraies.png" alt="Lago di Braies" />
-            <div class="card__content">
-              <p class="card__title">Lago di Braies</p>
-              <button class="card__like-button"></button>
-              <button class="card__delete-button" type="button"></button>
-            </div>
-          </div>
-        </section>
+        <!-- Contenedor donde se insertarán las tarjetas desde la API -->
+        <section class="gallery" id="cards-container"></section>
 
-        <!-- Creación de Tarjetas Nuevas-->
+        <!-- Template único de tarjeta -->
         <template id="card-template">
-  <div class="card">
-    <img class="card__image" src="" alt="" />
-    <div class="card__content">
-      <p class="card__title"></p>
-      <button class="card__like-button"></button>
-      <button class="card__delete-button" type="button"></button>
-    </div>
-  </div>
-</template>
-
+          <div class="card">
+            <img class="card__image" src="" alt="" />
+            <div class="card__content">
+              <p class="card__title"></p>
+              <button class="card__like-button" type="button"></button>
+              <button class="card__delete-button" type="button"></button>
+            </div>
+          </div>
+        </template>
       </main>
 
       <footer class="footer">
@@ -127,6 +80,7 @@
           <input
             type="text"
             id="name-profile"
+            name="name"
             placeholder="Nombre"
             class="popup__input"
             minlength="2"
@@ -137,6 +91,7 @@
           <input
             type="text"
             id="job-profile"
+            name="about"
             placeholder="Acerca de mí"
             class="popup__input popup__input_job"
             minlength="2"
@@ -160,6 +115,7 @@
           <input
             type="text"
             id="card-title"
+            name="name"
             placeholder="Título"
             class="popup__input popup__input_card-title"
             minlength="2"
@@ -170,6 +126,7 @@
           <input
             type="url"
             id="card-url"
+            name="link"
             placeholder="URL de la imagen"
             class="popup__input popup__input_card-url"
             required
@@ -183,59 +140,45 @@
     </dialog>
 
     <!-- Popup: Imagen -->
-<div class="popup" id="popup-image">
+    <div class="popup" id="popup-image">
       <div class="popup__container popup__container--image">
         <button type="button" class="popup__exit" id="popup-image-close-button">X</button>
         <img class="popup__img" />
         <h2 class="popup__img-title"></h2>
       </div>
     </div>
-    <section class="cards">
-      <template id="card-template">
-        <div class="card">
-          <button class="card__delete-button" type="button"></button>
-          <img
-            src="./images/valledeyosemite.jpg"
-            class="card__image"
-            alt="Imagen de Valle de Yosemite"
-            id="popuImageImg"
-          />
-          <div class="card__info">
-            <h2 class="card__title">Valle de Yosemite</h2>
-            <button class="card__like-button" type="button"></button>
-          </div>
-        </div>
-      </template>
-    </section>
 
     <!-- Popup confirmar borrado -->
-<div class="popup" id="confirm-popup">
-  <div class="popup__container">
-    <form class="popup__form" id="confirm-form">
-      <h2 class="popup__title">¿Eliminar tarjeta?</h2>
-      <button type="submit" class="popup__button popup__button_delete">Sí, eliminar</button>
-    </form>
-  </div>
-</div>
+    <div class="popup" id="confirm-popup">
+      <div class="popup__container">
+        <form class="popup__form" id="confirm-form">
+          <h2 class="popup__title">¿Eliminar tarjeta?</h2>
+          <button type="submit" class="popup__button popup__button_delete">Sí, eliminar</button>
+        </form>
+      </div>
+    </div>
 
-<!-- Popup: Editar avatar -->
-<dialog class="popup" id="avatar-popup">
-  <div class="popup__container">
-    <button class="popup__button popup__button_close" id="close-avatar">X</button>
-    <form class="popup__form" id="avatar-form">
-      <h2 class="popup__title">Actualizar avatar</h2>
-      <input type="url" id="avatar-url" class="popup__input" placeholder="URL de la imagen" required>
-      <span id="avatar-url-error" class="popup__error"></span>
-      <button type="submit" class="popup__button popup__button_save">Guardar</button>
-    </form>
-  </div>
-</dialog>
-
-<!-- Botón para abrir avatar form (coloca encima de la avatar img en tu perfil) -->
-<button id="edit-avatar" class="profile__avatar-edit" aria-label="Editar avatar"></button>
-
+    <!-- Popup: Editar avatar -->
+    <dialog class="popup" id="avatar-popup">
+      <div class="popup__container">
+        <button class="popup__button popup__button_close" id="close-avatar">X</button>
+        <form class="popup__form" id="avatar-form">
+          <h2 class="popup__title">Actualizar avatar</h2>
+          <input
+            type="url"
+            id="avatar-url"
+            name="avatar"
+            class="popup__input"
+            placeholder="URL de la imagen"
+            required
+          />
+          <span id="avatar-url-error" class="popup__error"></span>
+          <button type="submit" class="popup__button popup__button_save">Guardar</button>
+        </form>
+      </div>
+    </dialog>
 
     <!-- Scripts -->
-<script type="module" src="scripts/index.js"></script>
+    <script type="module" src="scripts/index.js"></script>
   </body>
 </html>
