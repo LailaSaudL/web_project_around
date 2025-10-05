@@ -1,14 +1,7 @@
-// scripts/index.js
 import { FormValidator } from "./FormValidator.js";
-import { Card } from "./components/Card.js";
-import { Section } from "./components/Section.js";
-import { UserInfo } from "./components/UserInfo.js";
-import { PopupWithForm } from "./components/PopupWithForm.js";
-import { PopupWithImage } from "./components/PopupWithImage.js";
-import { PopupWithConfirmation } from "./components/PopupWithConfirmation.js";
-import { api } from "./Api.js";
+import { openPopup, closePopup } from "./utils.js";
 
-// --------- CONFIG ---------
+/* ------------------ Config validación ------------------ */
 const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
@@ -18,129 +11,171 @@ const validationConfig = {
   errorClass: "popup__error_visible",
 };
 
-// --------- ELEMENTOS ---------
-const profilePopupSelector = "#profile-popup";
-const cardPopupSelector = "#card-popup";
-const avatarPopupSelector = "#avatar-popup";
-const confirmPopupSelector = "#confirm-popup";
-const imagePopupSelector = "#popup-image";
+/* ------------------ Selectores / elementos ------------------ */
+const profilePopup = document.getElementById("profile-popup");
+const cardPopup = document.getElementById("card-popup");
+const imagePopup = document.getElementById("popup-image");
 
-const profileForm = document.querySelector("#profile-form");
-const cardForm = document.querySelector("#card-form");
-const avatarForm = document.querySelector("#avatar-form");
+const editButton = document.getElementById("edit-button");
+const closeProfileButton = document.getElementById("close-button");
+const addCardButton = document.getElementById("add-card");
+const closeCardButton = document.getElementById("close-card");
 
-const editButton = document.querySelector("#edit-button");
-const addCardButton = document.querySelector("#add-card");
-const avatarButton = document.querySelector("#avatar-button");
+const profileForm = document.getElementById("profile-form");
+const cardForm = document.getElementById("card-form");
 
-// --------- INSTANCIAS ---------
-const userInfo = new UserInfo({
-  nameSelector: ".profile__name",
-  aboutSelector: ".profile__text",
-  avatarSelector: ".profile__avatar",
-});
+const nameInput = document.getElementById("name-profile");
+const jobInput = document.getElementById("job-profile");
+const profileName = document.querySelector(".profile__name");
+const profileText = document.querySelector(".profile__text");
 
-let currentUserId;
+const popupImageElem = imagePopup ? imagePopup.querySelector(".popup__img") : null;
+const popupImageTitle = imagePopup ? imagePopup.querySelector(".popup__img-title") : null;
+const popupImageCloseBtn = document.getElementById("popup-image-close-button");
 
-// Popup imagen
-const popupWithImage = new PopupWithImage(imagePopupSelector);
-popupWithImage.setEventListeners();
+const cardsContainer = document.getElementById("cards-container");
+const cardTemplate = document.getElementById("card-template");
 
-// Popup confirmar
-const popupWithConfirm = new PopupWithConfirmation(confirmPopupSelector);
-popupWithConfirm.setEventListeners();
+/* ------------------ Validadores (instancias) ------------------ */
+let profileValidator = null;
+let cardValidator = null;
 
-// Section de tarjetas
-const cardSection = new Section(
-  (item) => {
-    const cardElement = createCard(item);
-    cardSection.addItem(cardElement);
-  },
-  "#cards-container"
-);
-
-// --------- FUNCIONES ---------
-function createCard(data) {
-  const card = new Card({
-    data,
-    currentUserId,
-    templateSelector: "#card-template",
-    handleCardClick: ({ name, link }) => popupWithImage.open(name, link),
-    handleDeleteClick: (cardInstance) => {
-      popupWithConfirm.open();
-      popupWithConfirm.setSubmitAction(() =>
-        api.deleteCard(cardInstance._id).then(() => {
-          cardInstance.removeCard();
-        })
-      );
-    },
-    handleLikeToggle: (cardId, isLiked) => {
-      return isLiked ? api.removeLike(cardId) : api.addLike(cardId);
-    },
-  });
-  return card.generateCard();
+if (profileForm) {
+  profileValidator = new FormValidator(validationConfig, profileForm);
+  profileValidator.enableValidation();
 }
 
-// --------- POPUPS DE FORM ---------
-const popupEditProfile = new PopupWithForm(profilePopupSelector, (formData) => {
-  return api.setUserInfo({ name: formData["name-profile"], about: formData["job-profile"] })
-    .then((res) => {
-      userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
+if (cardForm) {
+  cardValidator = new FormValidator(validationConfig, cardForm);
+  cardValidator.enableValidation();
+}
+
+/* ------------------ Helpers: abrir/cerrar imagen ------------------ */
+function openImagePopup(name, link) {
+  if (!popupImageElem || !popupImageTitle) return;
+  popupImageElem.src = link;
+  popupImageElem.alt = name;
+  popupImageTitle.textContent = name;
+  openPopup(imagePopup);
+}
+
+/* ------------------ Crear tarjeta desde template ------------------ */
+function createCardElement(name, link) {
+  if (!cardTemplate) return null;
+  const cardFragment = cardTemplate.content.cloneNode(true);
+  const cardEl = cardFragment.querySelector(".card");
+  const img = cardEl.querySelector(".card__image");
+  const title = cardEl.querySelector(".card__title");
+  const likeBtn = cardEl.querySelector(".card__like-button");
+  const delBtn = cardEl.querySelector(".card__delete-button");
+
+  if (img) {
+    img.src = link;
+    img.alt = name;
+    img.addEventListener("click", () => openImagePopup(name, link));
+  }
+  if (title) title.textContent = name;
+
+  if (likeBtn) {
+    likeBtn.addEventListener("click", () => {
+      likeBtn.classList.toggle("card__like-button_active");
     });
-});
-popupEditProfile.setEventListeners();
+  }
 
-const popupAddCard = new PopupWithForm(cardPopupSelector, (formData) => {
-  return api.addCard({ name: formData["card-title"], link: formData["card-url"] })
-    .then((newCard) => {
-      const cardElement = createCard(newCard);
-      cardSection.addItem(cardElement);
+  if (delBtn) {
+    delBtn.addEventListener("click", () => {
+      const cardNode = delBtn.closest(".card");
+      if (cardNode) cardNode.remove();
     });
+  }
+
+  return cardEl;
+}
+
+/* ------------------ Event handlers: botones/popups ------------------ */
+if (editButton) {
+  editButton.addEventListener("click", () => {
+    // rellenar inputs con el perfil actual
+    if (profileName) nameInput.value = profileName.textContent || "";
+    if (profileText) jobInput.value = profileText.textContent || "";
+
+    // resetear validación (si existe)
+    if (profileValidator) profileValidator.resetValidation();
+
+    openPopup(profilePopup);
+  });
+}
+
+if (closeProfileButton) {
+  closeProfileButton.addEventListener("click", () => closePopup(profilePopup));
+}
+
+if (profileForm) {
+  profileForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (profileName) profileName.textContent = nameInput.value;
+    if (profileText) profileText.textContent = jobInput.value;
+    closePopup(profilePopup);
+  });
+}
+
+if (addCardButton) {
+  addCardButton.addEventListener("click", () => {
+    if (cardValidator) cardValidator.resetValidation();
+    openPopup(cardPopup);
+  });
+}
+
+if (closeCardButton) {
+  closeCardButton.addEventListener("click", () => closePopup(cardPopup));
+}
+
+if (cardForm) {
+  cardForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = document.getElementById("card-title").value.trim();
+    const url = document.getElementById("card-url").value.trim();
+    if (!title || !url) return;
+    const newCard = createCardElement(title, url);
+    if (newCard && cardsContainer) {
+      cardsContainer.prepend(newCard);
+    }
+    cardForm.reset();
+    closePopup(cardPopup);
+  });
+}
+
+/* ------------------ Image popup close button ------------------ */
+if (popupImageCloseBtn) {
+  popupImageCloseBtn.addEventListener("click", () => closePopup(imagePopup));
+}
+
+/* ------------------ Cerrar con clic en el overlay (fondo) ------------------ */
+document.querySelectorAll(".popup").forEach(popup => {
+  popup.addEventListener("click", (evt) => {
+    // si el target es exactamente el overlay (no un hijo)
+    if (evt.target === popup) {
+      closePopup(popup);
+    }
+  });
 });
-popupAddCard.setEventListeners();
 
-const popupUpdateAvatar = new PopupWithForm(avatarPopupSelector, (formData) => {
-  return api.updateAvatar({ avatar: formData["avatar-url"] })
-    .then((res) => {
-      userInfo.setUserInfo({ name: res.name, about: res.about, avatar: res.avatar });
-    });
-});
-popupUpdateAvatar.setEventListeners();
-
-// --------- VALIDADORES ---------
-const profileValidator = new FormValidator(validationConfig, profileForm);
-profileValidator.enableValidation();
-
-const cardValidator = new FormValidator(validationConfig, cardForm);
-cardValidator.enableValidation();
-
-const avatarValidator = new FormValidator(validationConfig, avatarForm);
-avatarValidator.enableValidation();
-
-// --------- EVENTOS DE BOTONES ---------
-editButton.addEventListener("click", () => {
-  const { name, about } = userInfo.getUserInfo();
-  profileForm.querySelector("#name-profile").value = name;
-  profileForm.querySelector("#job-profile").value = about;
-  profileValidator.resetValidation();
-  popupEditProfile.open();
+/* ------------------ Cerrar con ESC ------------------ */
+document.addEventListener("keydown", (evt) => {
+  if (evt.key !== "Escape") return;
+  // Priorizar dialog abierto
+  const openedDialog = document.querySelector("dialog.popup[open]");
+  if (openedDialog) {
+    closePopup(openedDialog);
+    return;
+  }
+  const openedDiv = document.querySelector(".popup.popup_opened");
+  if (openedDiv) closePopup(openedDiv);
 });
 
-addCardButton.addEventListener("click", () => {
-  cardValidator.resetValidation();
-  popupAddCard.open();
+/* ------------------ Inicial: añadir listeners a imágenes estáticas (si las hay) ------------------ */
+document.querySelectorAll(".card__image").forEach(img => {
+  img.addEventListener("click", () => {
+    openImagePopup(img.alt || "", img.src || "");
+  });
 });
-
-avatarButton.addEventListener("click", () => {
-  avatarValidator.resetValidation();
-  popupUpdateAvatar.open();
-});
-
-// --------- CARGA INICIAL ---------
-Promise.all([api.getUserInfo(), api.getInitialCards()])
-  .then(([userData, initialCards]) => {
-    currentUserId = userData._id;
-    userInfo.setUserInfo({ name: userData.name, about: userData.about, avatar: userData.avatar });
-    cardSection.renderItems(initialCards);
-  })
-  .catch((err) => console.error(err));
