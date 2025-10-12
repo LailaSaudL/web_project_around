@@ -13,10 +13,12 @@
 
   <body>
     <div class="page">
+      <!-- HEADER -->
       <header class="header">
         <img class="header__logo" src="./images/logo.png" alt="Around USA logo" />
       </header>
 
+      <!-- PERFIL -->
       <main class="content">
         <section class="profile">
           <div class="profile__avatar-container">
@@ -25,9 +27,13 @@
               src="./images/avatar.jpg"
               alt="Avatar del usuario"
             />
-            <!-- Botón de edición de avatar -->
-            <button id="edit-avatar" class="profile__avatar-edit" aria-label="Editar avatar"></button>
+            <button
+              id="edit-avatar"
+              class="profile__avatar-edit"
+              aria-label="Editar avatar"
+            ></button>
           </div>
+
           <div class="profile__info">
             <div class="profile__details">
               <h1 class="profile__name">Jacques Cousteau</h1>
@@ -41,6 +47,7 @@
             </div>
             <p class="profile__text">Explorador</p>
           </div>
+
           <button class="add-button" id="add-card">
             <img
               class="add-button__image"
@@ -50,31 +57,33 @@
           </button>
         </section>
 
-        <!-- Contenedor donde se insertarán las tarjetas desde la API -->
+        <!-- CONTENEDOR DE TARJETAS -->
         <section class="gallery" id="cards-container"></section>
 
-        <!-- Template único de tarjeta -->
+        <!-- TEMPLATE DE TARJETA -->
         <template id="card-template">
           <div class="card">
+            <button class="card__delete-button" type="button"></button>
             <img class="card__image" src="" alt="" />
             <div class="card__content">
               <p class="card__title"></p>
-              <button class="card__like-button" type="button"></button>
-              <button class="card__delete-button" type="button"></button>
+              <div class="card__like-container">
+                <button class="card__like-button" type="button"></button>
+                <span class="card__like-count">0</span>
+              </div>
             </div>
           </div>
         </template>
       </main>
 
-      <footer class="footer">
-        © 2025 Alrededor de los EE.UU.
-      </footer>
+      <!-- FOOTER -->
+      <footer class="footer">© 2025 Alrededor de los EE.UU.</footer>
     </div>
 
-    <!-- Popup: Editar Perfil -->
-    <dialog class="popup" id="profile-popup">
+    <!-- POPUP: Editar Perfil -->
+    <div class="popup" id="profile-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" id="close-button">X</button>
+        <button class="popup__button popup__button_close" type="button"></button>
         <form class="popup__form" id="profile-form">
           <h2 class="popup__title">Editar Perfil</h2>
           <input
@@ -88,28 +97,30 @@
             required
           />
           <span class="popup__error" id="name-profile-error"></span>
+
           <input
             type="text"
             id="job-profile"
             name="about"
             placeholder="Acerca de mí"
-            class="popup__input popup__input_job"
+            class="popup__input"
             minlength="2"
             maxlength="30"
             required
           />
           <span class="popup__error" id="job-profile-error"></span>
+
           <button type="submit" class="popup__button popup__button_save">
             Guardar
           </button>
         </form>
       </div>
-    </dialog>
+    </div>
 
-    <!-- Popup: Nueva tarjeta -->
-    <dialog class="popup" id="card-popup">
+    <!-- POPUP: Nueva Tarjeta -->
+    <div class="popup" id="card-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" id="close-card">X</button>
+        <button class="popup__button popup__button_close" type="button"></button>
         <form class="popup__form" id="card-form">
           <h2 class="popup__title">Nuevo Lugar</h2>
           <input
@@ -117,51 +128,55 @@
             id="card-title"
             name="name"
             placeholder="Título"
-            class="popup__input popup__input_card-title"
+            class="popup__input"
             minlength="2"
             maxlength="30"
             required
           />
           <span class="popup__error" id="card-title-error"></span>
+
           <input
             type="url"
             id="card-url"
             name="link"
             placeholder="URL de la imagen"
-            class="popup__input popup__input_card-url"
+            class="popup__input"
             required
           />
           <span class="popup__error" id="card-url-error"></span>
+
           <button type="submit" class="popup__button popup__button_add">
             Crear
           </button>
         </form>
       </div>
-    </dialog>
+    </div>
 
-    <!-- Popup: Imagen -->
+    <!-- POPUP: Imagen Ampliada -->
     <div class="popup" id="popup-image">
       <div class="popup__container popup__container--image">
-        <button type="button" class="popup__exit" id="popup-image-close-button">X</button>
+        <button type="button" class="popup__exit">X</button>
         <img class="popup__img" />
         <h2 class="popup__img-title"></h2>
       </div>
     </div>
 
-    <!-- Popup confirmar borrado -->
+    <!-- POPUP: Confirmar Eliminación -->
     <div class="popup" id="confirm-popup">
       <div class="popup__container">
         <form class="popup__form" id="confirm-form">
           <h2 class="popup__title">¿Eliminar tarjeta?</h2>
-          <button type="submit" class="popup__button popup__button_delete">Sí, eliminar</button>
+          <button type="submit" class="popup__button popup__button_delete">
+            Sí, eliminar
+          </button>
         </form>
       </div>
     </div>
 
-    <!-- Popup: Editar avatar -->
-    <dialog class="popup" id="avatar-popup">
+    <!-- POPUP: Editar Avatar -->
+    <div class="popup" id="avatar-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" id="close-avatar">X</button>
+        <button class="popup__button popup__button_close" type="button"></button>
         <form class="popup__form" id="avatar-form">
           <h2 class="popup__title">Actualizar avatar</h2>
           <input
@@ -173,12 +188,14 @@
             required
           />
           <span id="avatar-url-error" class="popup__error"></span>
-          <button type="submit" class="popup__button popup__button_save">Guardar</button>
+          <button type="submit" class="popup__button popup__button_save">
+            Guardar
+          </button>
         </form>
       </div>
-    </dialog>
+    </div>
 
-    <!-- Scripts -->
+    <!-- JS -->
     <script type="module" src="scripts/index.js"></script>
   </body>
 </html>
