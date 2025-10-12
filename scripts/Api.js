@@ -76,7 +76,7 @@ export class Api {
 
 // ✅ Instancia con URL correcta + tu token real
 export const api = new Api({
-  baseUrl: "https://around-api.es.tripleten-services.com/v1/users", // 🔥 corregido
+  baseUrl: "https://around-api.es.tripleten-services.com/v1/users",
   headers: {
     authorization: "327f677d-2fa5-4635-8f0a-94301860a124",
     "Content-Type": "application/json",
