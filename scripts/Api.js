@@ -1,6 +1,6 @@
 export class Api {
   constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl;   // ejemplo: "https://around-api.es.tripleten-services.com/v1"
+    this._baseUrl = baseUrl; // ejemplo: "https://around-api.es.tripleten-services.com/v1"
     this._headers = headers;
   }
 
@@ -11,12 +11,16 @@ export class Api {
 
   // Obtener info del usuario
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers }).then(this._checkRes);
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: this._headers,
+    }).then(this._checkRes);
   }
 
   // Obtener tarjetas iniciales
   getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, { headers: this._headers }).then(this._checkRes);
+    return fetch(`${this._baseUrl}/cards`, {
+      headers: this._headers,
+    }).then(this._checkRes);
   }
 
   // Editar perfil
@@ -70,11 +74,11 @@ export class Api {
   }
 }
 
-// Instancia del API — pon aquí tu token real
+// ✅ Instancia correcta del API
 export const api = new Api({
-  baseUrl: "https://practicum-content.s3.us-west-1.amazonaws.com/frontend-developer/common/avatar.jpg", // raíz del API
+  baseUrl: "https://around-api.es.tripleten-services.com/v1", 
   headers: {
-    authorization: "327f677d-2fa5-4635-8f0a-94301860a124", // tu token
+    authorization: "327f677d-2fa5-4635-8f0a-94301860a124",
     "Content-Type": "application/json",
   },
 });
