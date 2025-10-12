@@ -5,17 +5,16 @@ export class Popup {
         ? document.querySelector(popupSelector)
         : popupSelector;
     this._handleEscClose = this._handleEscClose.bind(this);
-    this._isEscListening = false; // para evitar listeners duplicados
+    this._isEscListening = false; // evita duplicar listeners
   }
 
   open() {
     if (!this._popup) return;
 
-    // Abrir según tipo
+    // Si es <dialog>, usar showModal; si no, usar clase CSS
     if (this._popup.tagName === "DIALOG") {
       if (typeof this._popup.showModal === "function") {
         this._popup.showModal();
-        // Algunos navegadores requieren focus para captar el "Escape"
         this._popup.focus();
       } else {
         this._popup.classList.add("popup_opened");
@@ -62,15 +61,9 @@ export class Popup {
       btn.addEventListener("click", () => this.close())
     );
 
-    // Cierre por clic en overlay
+    // Cierre al hacer clic en el overlay
     this._popup.addEventListener("click", (evt) => {
-      // Evita cerrar si se hace clic dentro del contenido del popup
-      const container = this._popup.querySelector(".popup__container");
-      if (evt.target === this._popup && !container.contains(evt.target)) {
-        this.close();
-      }
-      // Para <dialog> también aplica cuando se hace clic fuera
-      if (evt.target === this._popup && this._popup.tagName === "DIALOG") {
+      if (evt.target === this._popup) {
         this.close();
       }
     });
