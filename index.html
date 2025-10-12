@@ -3,9 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Explora paisajes de los Estados Unidos." />
+    <meta
+      name="description"
+      content="Explora paisajes de los Estados Unidos."
+    />
     <meta name="author" content="Laila Saud Laborde" />
-    <meta name="keywords" content="Naturaleza, Viaje, Aventura, Parques Nacionales" />
+    <meta
+      name="keywords"
+      content="Naturaleza, Viaje, Aventura, Parques Nacionales"
+    />
     <title>Alrededor de los EE.UU</title>
     <link rel="stylesheet" href="./pages/index.css" />
     <link rel="shortcut icon" href="./favicon.ico" />
@@ -15,7 +21,11 @@
     <div class="page">
       <!-- HEADER -->
       <header class="header">
-        <img class="header__logo" src="./images/logo.png" alt="Around USA logo" />
+        <img
+          class="header__logo"
+          src="./images/logo.png"
+          alt="Around USA logo"
+        />
       </header>
 
       <!-- PERFIL -->
@@ -63,12 +73,20 @@
         <!-- TEMPLATE DE TARJETA -->
         <template id="card-template">
           <div class="card">
-            <button class="card__delete-button" type="button"></button>
+            <button
+              class="card__delete-button"
+              type="button"
+              aria-label="Eliminar tarjeta"
+            ></button>
             <img class="card__image" src="" alt="" />
             <div class="card__content">
               <p class="card__title"></p>
               <div class="card__like-container">
-                <button class="card__like-button" type="button"></button>
+                <button
+                  class="card__like-button"
+                  type="button"
+                  aria-label="Me gusta"
+                ></button>
                 <span class="card__like-count">0</span>
               </div>
             </div>
@@ -83,8 +101,14 @@
     <!-- POPUP: Editar Perfil -->
     <div class="popup" id="profile-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" type="button"></button>
-        <form class="popup__form" id="profile-form">
+        <button
+          class="popup__button popup__button_close"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+        <form class="popup__form" id="profile-form" novalidate>
           <h2 class="popup__title">Editar Perfil</h2>
           <input
             type="text"
@@ -120,8 +144,14 @@
     <!-- POPUP: Nueva Tarjeta -->
     <div class="popup" id="card-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" type="button"></button>
-        <form class="popup__form" id="card-form">
+        <button
+          class="popup__button popup__button_close"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+        <form class="popup__form" id="card-form" novalidate>
           <h2 class="popup__title">Nuevo Lugar</h2>
           <input
             type="text"
@@ -155,8 +185,14 @@
     <!-- POPUP: Imagen Ampliada -->
     <div class="popup" id="popup-image">
       <div class="popup__container popup__container--image">
-        <button type="button" class="popup__exit">X</button>
-        <img class="popup__img" />
+        <button
+          type="button"
+          class="popup__exit"
+          aria-label="Cerrar imagen"
+        >
+          ×
+        </button>
+        <img class="popup__img" alt="Imagen ampliada" />
         <h2 class="popup__img-title"></h2>
       </div>
     </div>
@@ -176,8 +212,14 @@
     <!-- POPUP: Editar Avatar -->
     <div class="popup" id="avatar-popup">
       <div class="popup__container">
-        <button class="popup__button popup__button_close" type="button"></button>
-        <form class="popup__form" id="avatar-form">
+        <button
+          class="popup__button popup__button_close"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+        <form class="popup__form" id="avatar-form" novalidate>
           <h2 class="popup__title">Actualizar avatar</h2>
           <input
             type="url"
