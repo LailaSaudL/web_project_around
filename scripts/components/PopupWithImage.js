@@ -1,18 +1,20 @@
-import { Popup } from './Popup.js';
+import { Popup } from "./Popup.js";
 
 export class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super(popupSelector);
-    this._image = this.popup.querySelector('.popup__img');
-    this._caption = this.popup.querySelector('.popup__img-title');
+    this._popupImage = this._popup.querySelector(".popup__img");
+    this._popupTitle = this._popup.querySelector(".popup__img-title");
   }
 
-  open(name, link) {
-    if (this._image) {
-      this._image.src = link;
-      this._image.alt = name;
+  open({ name, link }) {
+    if (!this._popupImage || !this._popupTitle) {
+      console.error("Error: elementos de imagen o título no encontrados en el popup");
+      return;
     }
-    if (this._caption) this._caption.textContent = name;
+    this._popupImage.src = link;
+    this._popupImage.alt = name;
+    this._popupTitle.textContent = name;
     super.open();
   }
 }
