@@ -95,8 +95,7 @@ function handleLikeToggle(cardId, isLiked) {
 
 function handleDeleteClick(cardInstance) {
   confirmPopup.setSubmitAction(() => {
-    // 🔧 corregido: cardInstance._cardId
-    return api.deleteCard(cardInstance._cardId).then(() => {
+    return api.deleteCard(cardInstance._id).then(() => {
       cardInstance.removeCard();
     });
   });
