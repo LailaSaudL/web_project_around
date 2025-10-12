@@ -9,35 +9,35 @@ export class Api {
     return Promise.reject(`Error: ${res.status}`);
   }
 
-  // Info usuario
+  // Obtener info del usuario
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers
+    return fetch(`${this._baseUrl}/me`, {
+      headers: this._headers,
     }).then(this._checkRes);
   }
 
-  // Tarjetas iniciales
+  // Obtener tarjetas iniciales
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: this._headers
+      headers: this._headers,
     }).then(this._checkRes);
   }
 
   // Editar perfil
   setUserInfo({ name, about }) {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return fetch(`${this._baseUrl}/me`, {
       method: "PATCH",
       headers: this._headers,
-      body: JSON.stringify({ name, about })
+      body: JSON.stringify({ name, about }),
     }).then(this._checkRes);
   }
 
-  // Agregar tarjeta
+  // Agregar nueva tarjeta
   addCard({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: this._headers,
-      body: JSON.stringify({ name, link })
+      body: JSON.stringify({ name, link }),
     }).then(this._checkRes);
   }
 
@@ -45,7 +45,7 @@ export class Api {
   deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
-      headers: this._headers
+      headers: this._headers,
     }).then(this._checkRes);
   }
 
@@ -53,32 +53,32 @@ export class Api {
   addLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",
-      headers: this._headers
+      headers: this._headers,
     }).then(this._checkRes);
   }
 
   removeLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "DELETE",
-      headers: this._headers
+      headers: this._headers,
     }).then(this._checkRes);
   }
 
-  // Cambiar avatar
+  // Actualizar avatar
   updateAvatar({ avatar }) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
+    return fetch(`${this._baseUrl}/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
-      body: JSON.stringify({ avatar })
+      body: JSON.stringify({ avatar }),
     }).then(this._checkRes);
   }
 }
 
-// Instancia con tu token real
+// ✅ Instancia con URL correcta + tu token real
 export const api = new Api({
-  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  baseUrl: "https://around-api.es.tripleten-services.com/v1/users", // 🔥 corregido
   headers: {
-    authorization: "327f677d-2fa5-4635-8f0a-94301860a124", // 👈 tu token
-    "Content-Type": "application/json"
-  }
+    authorization: "327f677d-2fa5-4635-8f0a-94301860a124",
+    "Content-Type": "application/json",
+  },
 });
