@@ -3,7 +3,7 @@ import { Card } from "./components/Card.js";
 import { PopupWithImage } from "./components/PopupWithImage.js";
 import { PopupWithForm } from "./components/PopupWithForm.js";
 import { PopupWithConfirmation } from "./components/PopupWithConfirmation.js";
-import { UserInfo } from "./components/UserInfo.js";
+import UserInfo from "./components/UserInfo.js";
 import { FormValidator } from "./FormValidator.js";
 
 // ----- SELECTORES -----
