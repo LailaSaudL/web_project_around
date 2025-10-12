@@ -29,6 +29,7 @@ const userInfo = new UserInfo({
   avatarSelector: ".profile__avatar",
 });
 
+// Popups -----
 const imagePopup = new PopupWithImage("#popup-image");
 imagePopup.setEventListeners();
 
@@ -39,23 +40,30 @@ const profilePopup = new PopupWithForm("#profile-popup", (formValues) => {
   return api
     .setUserInfo({ name: formValues.name, about: formValues.about })
     .then((updatedUser) => {
-      userInfo.setUserInfo({ name: updatedUser.name, about: updatedUser.about });
+      userInfo.setUserInfo({
+        name: updatedUser.name,
+        about: updatedUser.about,
+      });
     });
 });
 profilePopup.setEventListeners();
 
 const addCardPopup = new PopupWithForm("#card-popup", (formValues) => {
-  return api.addCard({ name: formValues.name, link: formValues.link }).then((newCard) => {
-    const cardEl = createCard(newCard);
-    cardsContainer.prepend(cardEl);
-  });
+  return api
+    .addCard({ name: formValues.name, link: formValues.link })
+    .then((newCard) => {
+      const cardEl = createCard(newCard);
+      cardsContainer.prepend(cardEl);
+    });
 });
 addCardPopup.setEventListeners();
 
 const avatarPopup = new PopupWithForm("#avatar-popup", (formValues) => {
-  return api.updateAvatar({ avatar: formValues.avatar }).then((updatedUser) => {
-    userInfo.setUserAvatar(updatedUser.avatar);
-  });
+  return api
+    .updateAvatar({ avatar: formValues.avatar })
+    .then((updatedUser) => {
+      userInfo.setUserAvatar(updatedUser.avatar);
+    });
 });
 avatarPopup.setEventListeners();
 
@@ -87,7 +95,8 @@ function handleLikeToggle(cardId, isLiked) {
 
 function handleDeleteClick(cardInstance) {
   confirmPopup.setSubmitAction(() => {
-    return api.deleteCard(cardInstance._id).then(() => {
+    // 🔧 corregido: cardInstance._cardId
+    return api.deleteCard(cardInstance._cardId).then(() => {
       cardInstance.removeCard();
     });
   });
@@ -110,7 +119,10 @@ function createCard(cardData) {
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, initialCards]) => {
     currentUserId = userData._id;
-    userInfo.setUserInfo({ name: userData.name, about: userData.about });
+    userInfo.setUserInfo({
+      name: userData.name,
+      about: userData.about,
+    });
     userInfo.setUserAvatar(userData.avatar);
 
     initialCards.reverse().forEach((card) => {
