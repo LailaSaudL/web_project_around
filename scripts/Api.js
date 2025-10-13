@@ -1,6 +1,6 @@
 export class Api {
   constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl; // ejemplo: "https://around-api.es.tripleten-services.com/v1"
+    this._baseUrl = baseUrl;
     this._headers = headers;
   }
 
@@ -9,21 +9,21 @@ export class Api {
     return Promise.reject(`Error: ${res.status}`);
   }
 
-  // Obtener info del usuario
+  // 1️⃣ Obtener información del usuario
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
     }).then(this._checkRes);
   }
 
-  // Obtener tarjetas iniciales
+  // 2️⃣ Obtener tarjetas iniciales
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
     }).then(this._checkRes);
   }
 
-  // Editar perfil
+  // 3️⃣ Editar perfil
   setUserInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
@@ -32,7 +32,7 @@ export class Api {
     }).then(this._checkRes);
   }
 
-  // Agregar nueva tarjeta
+  // 4️⃣ Agregar nueva tarjeta
   addCard({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
@@ -41,7 +41,7 @@ export class Api {
     }).then(this._checkRes);
   }
 
-  // Eliminar tarjeta
+  // 5️⃣ Eliminar tarjeta
   deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
@@ -49,7 +49,7 @@ export class Api {
     }).then(this._checkRes);
   }
 
-  // Likes
+  // 6️⃣ Dar like
   addLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",
@@ -57,6 +57,7 @@ export class Api {
     }).then(this._checkRes);
   }
 
+  // 7️⃣ Quitar like
   removeLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "DELETE",
@@ -64,7 +65,7 @@ export class Api {
     }).then(this._checkRes);
   }
 
-  // Actualizar avatar
+  // 8️⃣ Cambiar avatar
   updateAvatar({ avatar }) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
@@ -74,9 +75,9 @@ export class Api {
   }
 }
 
-// ✅ Instancia correcta del API
+// 🔑 Tu token y URL real del servidor:
 export const api = new Api({
-  baseUrl: "https://around-api.es.tripleten-services.com/v1", 
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
   headers: {
     authorization: "327f677d-2fa5-4635-8f0a-94301860a124",
     "Content-Type": "application/json",
