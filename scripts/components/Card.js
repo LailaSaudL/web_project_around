@@ -3,7 +3,7 @@ export class Card {
     this._name = data.name;
     this._link = data.link;
     this._id = data._id;
-    this._ownerId = data.owner?._id;
+    this._ownerId = data.owner?._id || data.owner;
     this._likes = data.likes || [];
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
@@ -13,15 +13,32 @@ export class Card {
   }
 
   _getTemplate() {
-    const cardTemplate = document
+    return document
       .querySelector(this._templateSelector)
-      .content.querySelector(".card")
+      .content
+      .querySelector(".card")
       .cloneNode(true);
-    return cardTemplate;
+  }
+
+  _setEventListeners() {
+    this._likeButton.addEventListener("click", () => this._handleLikeClick());
+    if (this._deleteButton) {
+      this._deleteButton.addEventListener("click", () => this._handleDeleteClick(this));
+    }
+    this._image.addEventListener("click", () => this._handleCardClick({ name: this._name, link: this._link }));
+  }
+
+  _handleLikeClick() {
+    this._handleLikeToggle(this._id, this._isLiked())
+      .then((updatedCard) => {
+        this._likes = updatedCard.likes;
+        this._updateLikeView();
+      })
+      .catch((err) => console.error("Error like:", err));
   }
 
   _isLiked() {
-    return this._likes.some(user => user._id === this._currentUserId);
+    return this._likes.some((user) => user._id === this._currentUserId);
   }
 
   _updateLikeView() {
@@ -30,23 +47,7 @@ export class Card {
     } else {
       this._likeButton.classList.remove("card__like-button_active");
     }
-    const likeCount = this._element.querySelector(".card__like-count");
-    if (likeCount) likeCount.textContent = this._likes.length;
-  }
-
-  _handleLikeClick() {
-    this._handleLikeToggle(this._id, this._isLiked())
-      .then(updatedCard => {
-        this._likes = updatedCard.likes;
-        this._updateLikeView();
-      })
-      .catch(err => console.error("Error al cambiar like:", err));
-  }
-
-  _setEventListeners() {
-    this._likeButton.addEventListener("click", () => this._handleLikeClick());
-    this._deleteButton.addEventListener("click", () => this._handleDeleteClick(this));
-    this._image.addEventListener("click", () => this._handleCardClick({ name: this._name, link: this._link }));
+    this._likeCount.textContent = this._likes.length;
   }
 
   removeCard() {
@@ -56,21 +57,24 @@ export class Card {
 
   generateCard() {
     this._element = this._getTemplate();
-    this._image = this._element.querySelector(".card__image");
     this._title = this._element.querySelector(".card__title");
+    this._image = this._element.querySelector(".card__image");
     this._likeButton = this._element.querySelector(".card__like-button");
+    this._likeCount = this._element.querySelector(".card__like-count");
     this._deleteButton = this._element.querySelector(".card__delete-button");
 
+    this._title.textContent = this._name;
     this._image.src = this._link;
     this._image.alt = this._name;
-    this._title.textContent = this._name;
 
-    if (this._ownerId !== this._currentUserId) {
+    // 🔒 Solo mostrar papelera si es del usuario
+    if (this._ownerId !== this._currentUserId && this._deleteButton) {
       this._deleteButton.remove();
     }
 
     this._updateLikeView();
     this._setEventListeners();
+
     return this._element;
   }
 }
