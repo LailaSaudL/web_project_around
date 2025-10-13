@@ -53,19 +53,21 @@ export class Card {
     console.log("Like click -> cardId:", this._id, "isLiked:", currentlyLiked);
 
     // delegate to the provided function (should return a Promise resolving to updated card data)
-    this._handleLikeToggle(this._id, currentlyLiked)
-      .then((updatedCard) => {
-        // Actualizar la lista de likes de manera segura
-        this._likes = Array.isArray(updatedCard.likes) ? updatedCard.likes : [];
-        this._updateLikeView();
-      })
-      .catch((err) => {
-        console.error("Error al cambiar like en servidor:", err);
-      })
-      .finally(() => {
-        if (this._likeButton) this._likeButton.disabled = false;
-      });
-  }
+this._handleLikeToggle(this._id, this._isLiked())
+  .then((updatedCard) => {
+    // si el servidor no envía likes, conservar el estado anterior
+    if (Array.isArray(updatedCard.likes)) {
+      this._likes = updatedCard.likes;
+    } else {
+      // si no devuelve likes, alternar manualmente el estado local
+      if (this._isLiked()) {
+        this._likes = this._likes.filter((user) => user._id !== this._currentUserId);
+      } else {
+        this._likes.push({ _id: this._currentUserId });
+      }
+    }
+    this._updateLikeView();
+  })
 
   _isLiked() {
     // protección: si _likes no es array -> false
