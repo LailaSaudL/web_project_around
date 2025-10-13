@@ -28,27 +28,33 @@ export class Card {
     this._image.addEventListener("click", () => this._handleCardClick({ name: this._name, link: this._link }));
   }
 
-  _handleLikeClick() {
-    this._handleLikeToggle(this._id, this._isLiked())
-      .then((updatedCard) => {
-        this._likes = updatedCard.likes || []; 
-        this._updateLikeView();
-      })
-      .catch((err) => console.error("Error like:", err));
+_handleLikeClick() {
+  this._handleLikeToggle(this._id, this._isLiked())
+    .then((updatedCard) => {
+      this._likes = Array.isArray(updatedCard.likes) ? updatedCard.likes : [];
+      this._updateLikeView();
+    })
+    .catch((err) => console.error("Error like:", err));
+}
+
+_isLiked() {
+  // si _likes no existe, devuelve false
+  return Array.isArray(this._likes)
+    ? this._likes.some((user) => user._id === this._currentUserId)
+    : false;
+}
+
+_updateLikeView() {
+  if (this._isLiked()) {
+    this._likeButton.classList.add("card__like-button_active");
+  } else {
+    this._likeButton.classList.remove("card__like-button_active");
   }
 
-  _isLiked() {
-    return this._likes.some((user) => user._id === this._currentUserId);
+  if (this._likeCount) {
+    this._likeCount.textContent = Array.isArray(this._likes) ? this._likes.length : 0;
   }
-
-  _updateLikeView() {
-    if (this._isLiked()) {
-      this._likeButton.classList.add("card__like-button_active");
-    } else {
-      this._likeButton.classList.remove("card__like-button_active");
-    }
-    this._likeCount.textContent = this._likes.length;
-  }
+}
 
   removeCard() {
     this._element.remove();
