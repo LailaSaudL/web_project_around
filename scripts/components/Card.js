@@ -64,6 +64,14 @@ export class Card {
       console.warn("No hay handleLikeToggle para esta carta:", this._id);
       return;
     }
+    if (!Array.isArray(updatedCard.likes)) {
+  // Fallback manual si la API no devuelve likes
+  if (currentlyLiked) {
+    this._likes = this._likes.filter(u => u._id !== this._currentUserId);
+  } else {
+    this._likes.push({ _id: this._currentUserId });
+  }
+}
     if (!this._id) {
       console.warn("Carta sin id:", this);
       return;
