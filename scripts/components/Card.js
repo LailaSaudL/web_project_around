@@ -4,7 +4,7 @@ export class Card {
     this._link = data.link;
     this._id = data._id;
     this._ownerId = data.owner?._id || data.owner;
-    this._likes = data.likes || [];
+    this._likes = Array.isArray(data.likes) ? data.likes : []; 
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
@@ -31,7 +31,7 @@ export class Card {
   _handleLikeClick() {
     this._handleLikeToggle(this._id, this._isLiked())
       .then((updatedCard) => {
-        this._likes = updatedCard.likes;
+        this._likes = updatedCard.likes || []; 
         this._updateLikeView();
       })
       .catch((err) => console.error("Error like:", err));
@@ -67,9 +67,10 @@ export class Card {
     this._image.src = this._link;
     this._image.alt = this._name;
 
-    // 🔒 Solo mostrar papelera si es del usuario
+    // 🔒 solo el propietario ve la papelera
     if (this._ownerId !== this._currentUserId && this._deleteButton) {
       this._deleteButton.remove();
+      this._deleteButton = null;
     }
 
     this._updateLikeView();
