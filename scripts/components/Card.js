@@ -5,7 +5,7 @@ export class Card {
     this._id = data._id;
     // owner puede venir como objeto o id, normalizamos
     this._ownerId = data.owner && (data.owner._id || data.owner);
-    // siempre garantizamos un array
+    // garantizamos siempre un array
     this._likes = Array.isArray(data.likes) ? data.likes : [];
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
@@ -32,66 +32,46 @@ export class Card {
     }
   }
 
+  // ❤️ Manejo del botón "Me gusta"
   _handleLikeClick() {
-    // protección: si no hay handler, salir
     if (typeof this._handleLikeToggle !== "function") {
       console.warn("No hay handleLikeToggle registrado para esta carta:", this._id);
       return;
     }
 
-    // protección: si no tenemos id, salir
     if (!this._id) {
       console.warn("Card sin id:", this);
       return;
     }
 
-    // bloquear botón para evitar spam
+    // bloquea el botón momentáneamente
     if (this._likeButton) this._likeButton.disabled = true;
 
     const currentlyLiked = this._isLiked();
-    // Registrar en consola para depuración
     console.log("Like click -> cardId:", this._id, "isLiked:", currentlyLiked);
 
-    // delegate to the provided function (should return a Promise resolving to updated card data)
-_handleLikeClick() {
-  if (typeof this._handleLikeToggle !== "function") {
-    console.warn("No hay handleLikeToggle registrado para esta carta:", this._id);
-    return;
-  }
-
-  if (!this._id) {
-    console.warn("Card sin id:", this);
-    return;
-  }
-
-  if (this._likeButton) this._likeButton.disabled = true;
-
-  const currentlyLiked = this._isLiked();
-  console.log("Like click -> cardId:", this._id, "isLiked:", currentlyLiked);
-
-  this._handleLikeToggle(this._id, currentlyLiked)
-    .then((updatedCard) => {
-      // si el servidor no envía likes, conservar el estado anterior
-      if (Array.isArray(updatedCard.likes)) {
-        this._likes = updatedCard.likes;
-      } else {
-        // si no devuelve likes, alternar manualmente el estado local
-        if (currentlyLiked) {
-          this._likes = this._likes.filter((user) => user._id !== this._currentUserId);
+    this._handleLikeToggle(this._id, currentlyLiked)
+      .then((updatedCard) => {
+        // si el servidor devuelve un array válido, lo usamos
+        if (Array.isArray(updatedCard.likes)) {
+          this._likes = updatedCard.likes;
         } else {
-          this._likes.push({ _id: this._currentUserId });
+          // si no devuelve likes, alternamos manualmente
+          if (currentlyLiked) {
+            this._likes = this._likes.filter((user) => user._id !== this._currentUserId);
+          } else {
+            this._likes.push({ _id: this._currentUserId });
+          }
         }
-      }
-      this._updateLikeView();
-    })
-    .catch((err) => console.error("Error al hacer like:", err))
-    .finally(() => {
-      if (this._likeButton) this._likeButton.disabled = false;
-    });
-}
+        this._updateLikeView();
+      })
+      .catch((err) => console.error("Error al hacer like:", err))
+      .finally(() => {
+        if (this._likeButton) this._likeButton.disabled = false;
+      });
+  }
 
   _isLiked() {
-    // protección: si _likes no es array -> false
     if (!Array.isArray(this._likes)) return false;
     return this._likes.some((user) => user._id === this._currentUserId);
   }
@@ -105,7 +85,6 @@ _handleLikeClick() {
       this._likeButton.classList.remove("card__like-button_active");
     }
 
-    // contador seguro
     this._likeCount.textContent = Array.isArray(this._likes) ? this._likes.length : 0;
   }
 
